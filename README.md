@@ -30,6 +30,7 @@ TCMineMods/
 │       ├── CLAUDE.md           # regras do mod para o Claude Code
 │       ├── docs/               # PLANO.md, DECISOES.md (e outros do mod)
 │       └── src/                # main/java, main/resources, main/templates (mods.toml), test/java
+├── dev/                  # execução com todos os mods juntos (:dev:runClient); não é um mod
 ├── libs/                 # jars do ATM10 para compilar e testar (fora do git; ver libs/LEIA-ME.md)
 ├── docs/DECISOES.md      # decisões do workspace (build, core)
 ├── tools/                # scripts auxiliares (ícones das telas)
@@ -48,6 +49,7 @@ Build Tools → Gradle → Gradle JVM* = 21.
 ./gradlew test --rerun               # só os testes (resultado de cada um no terminal)
 ./gradlew :quantum:runClient         # Minecraft de desenvolvimento com o mod (o core roda junto)
 ./gradlew :quantum:runServer         # servidor de desenvolvimento (-Pserver_port=25566 para uma segunda porta)
+./gradlew :dev:runClient             # todos os mods TC juntos, com os jars de libs/ (MineColonies, AE2, JEI)
 ```
 
 O Colony Bridge só compila com os jars do MineColonies em `libs/` (ver `libs/LEIA-ME.md`).

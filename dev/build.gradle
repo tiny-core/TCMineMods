@@ -1,0 +1,5 @@
+// Execução com todos os mods TC juntos: ./gradlew :dev:runClient (ou :dev:runServer). Mundo e configs em dev/run/.
+// Precisa dos jars do ATM10 em libs/ (ver libs/LEIA-ME.md). Configuração no plugin "tc.dev" (build-logic/).
+plugins {
+    id 'tc.dev'
+}

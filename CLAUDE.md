@@ -8,6 +8,7 @@ Cada mod tem o próprio `CLAUDE.md` com o que é específico dele; este arquivo 
 TCMineMods/
 ├── settings.gradle / build.gradle / gradle.properties   # build multiprojeto; versões comuns (MC, NeoForge, AE2)
 ├── build-logic/             # plugin "tc.mod": o que todo mod repete (NeoForge, TC Core, runs, testes, mods.toml)
+├── dev/                     # execução com todos os mods juntos (não é um mod)
 ├── libs/                    # jars do ATM10 para compilar/testar (fora do git)
 ├── mods/
 │   ├── core/                # TC Core (tccore): biblioteca comum — mod separado em jogo
@@ -41,6 +42,7 @@ Planejado: mod de reatores do Mekanism, no mesmo estilo (ver README.md, "Criar u
 ./gradlew test --rerun               # testes JUnit de todos os mods (resultado de cada um no terminal)
 ./gradlew :colony-bridge:runClient   # cliente de desenvolvimento de um mod (o core roda junto)
 ./gradlew :colony-bridge:runServer   # servidor de desenvolvimento
+./gradlew :dev:runClient             # todos os mods TC juntos (jars do ATM10 em libs/)
 ```
 O teste real é feito pelo autor no ATM10 (instalando o jar do mod **e** o `tccore-<versão>.jar`).
 Depois de mudanças em lógica de jogo, diga **o que ele deve testar em jogo** (passos curtos e o

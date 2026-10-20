@@ -1,0 +1,51 @@
+// Plugin "tc.dev": execução de desenvolvimento com TODOS os mods TC juntos (./gradlew :dev:runClient), para testar
+// a convivência entre eles como no ATM10. Não gera jar nem mod próprio: só junta os mods do workspace e os jars de
+// libs/ (MineColonies, AE2, JEI...) numa execução. Cada mod continua com o próprio runClient para testes isolados.
+plugins {
+    id 'java'
+    id 'net.neoforged.moddev'
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+layout.buildDirectory = rootProject.layout.buildDirectory.dir(project.name)
+
+// Todo subprojeto que aplica o plugin "tc.mod" é um mod TC.
+def modProjects = rootProject.subprojects.findAll { it != project }
+modProjects.each { evaluationDependsOn(it.path) }
+modProjects = modProjects.findAll { it.plugins.hasPlugin('tc.mod') }
+
+configurations {
+    localRuntime
+    runtimeClasspath.extendsFrom localRuntime
+}
+
+neoForge {
+    version = project.neo_version
+
+    modProjects.each { p ->
+        mods.create(p.property('mod_id').toString()) {
+            sourceSet(p.sourceSets.main)
+        }
+    }
+
+    runs {
+        client {
+            client()
+        }
+        server {
+            server()
+            programArgument '--nogui'
+        }
+    }
+}
+
+dependencies {
+    modProjects.each { implementation it }
+    // Jars do ATM10 (libs/ da raiz, ou -Plibs_dir=...).
+    localRuntime fileTree(dir: rootProject.file(project.findProperty('libs_dir') ?: 'libs'), include: '*.jar')
+}
+
+// Projeto sem código: nada para empacotar.
+tasks.named('jar') {
+    enabled = false
+}

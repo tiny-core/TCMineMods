@@ -19,3 +19,6 @@ rootProject.name = 'TCMineMods'
     include name
     project(":$name").projectDir = file("mods/$name")
 }
+
+// Execução de desenvolvimento com todos os mods juntos (./gradlew :dev:runClient). Não é um mod.
+include 'dev'
