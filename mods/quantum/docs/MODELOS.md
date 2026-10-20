@@ -51,6 +51,11 @@ indicado acima.
 
 ## Texturas
 
+Itens em `textures/item/`: `qubit_module_1` … `qubit_module_5` (chip com qubit roxo e um ponto por nível, na cor do
+nível). São provisórias, geradas por script: redesenhe à vontade mantendo o nome.
+
+Blocos em `textures/block/`:
+
 16×16 px, no desenho do protótipo: `metal`, `frame`, `dark`, `panel`, `trim` (laranja da marca), `vent`, `keys`,
 `monitor_*`; `glow_<cor>` (luzes), `glass_<cor>` (vidro translúcido; os modelos com vidro usam
 `"render_type": "minecraft:translucent"`), `flat_<cor>` (madeira e ouro). Pode redesenhar qualquer uma no Blockbench

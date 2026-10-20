@@ -7,9 +7,9 @@ Armazenamento e automação **sem cabos**: um Núcleo Quântico obrigatório e b
 completo, telas e modelos: `docs/PLANO.md`. **Ler o plano antes de mudar regras de
 `storage/` ou `grid/`.**
 
-Estado: **fase 1, fatia 1.3** — Núcleo Quântico (cubo 3×3×3), redes gravadas no mundo (`QuantumNetworks`), energia FE
-com espera, **Entrelaçador** e **Matriz de Superposição (Itens)** somando capacidade. Próximas: 1.4 Módulos de Qubits e
-pools de itens/fluidos no mundo, 1.5 Terminal (aba Rede).
+Estado: **fase 1, fatia 1.4** — Núcleo Quântico (cubo 3×3×3), redes gravadas no mundo (`QuantumNetworks`), energia FE
+com espera, Entrelaçador, Matriz de Superposição (Itens) com **Módulos de Qubits I–V**, e o **conteúdo da rede**
+(pools de itens e fluidos) gravado no mundo. Próximas: V1 (efeitos do Núcleo e da Matriz), 1.5 Terminal (aba Rede).
 
 ## Regras que não podem ser quebradas
 
@@ -28,6 +28,10 @@ pools de itens/fluidos no mundo, 1.5 Terminal (aba Rede).
 
 - Bloco que entra na rede: block entity herda `block/EntangledBlockEntity` e o bloco implementa `block/EntangledBlock`.
   A rede (`NetworkMembers`) é a fonte da verdade de capacidade e ligações; o bloco guarda só o id da rede.
+- Item e fluido do disco: leitura **estrita** (`ItemKey.parse`/`FluidKey.parse` com `CODEC.parse(...).result()`);
+  qualquer erro = ilegível, e o registro fica **órfão** em `NetworkStorage`, gravado de volta intacto. Nunca usar o
+  `ItemStack.parse` comum (aceita resultado parcial) nem apagar o que não deu para ler.
+- Carregar do disco usa `ResourcePool.restore` (ignora a capacidade); o jogo usa `insert`/`extract`.
 - Partículas e tudo que é visual ficam em `client/` (`@EventBusSubscriber(value = Dist.CLIENT)`); o servidor decide o
   que mostrar e manda por pacote (`network/`).
 
@@ -35,11 +39,11 @@ pools de itens/fluidos no mundo, 1.5 Terminal (aba Rede).
 
 | Pacote | O quê |
 |---|---|
-| `storage/` | `Amounts` (aritmética saturada), `ResourcePool` (recurso → quantidade, capacidade, mudanças para sync), `QuantityFormat` (1.2k, 3.4M ... 9.2E) |
-| `grid/` | `QuantumNetworks` (`SavedData` com todas as redes) sobre `NetworkDirectory` (qual rede um Núcleo assume, Núcleo mais próximo), `NetworkRecord`, `NetworkPower` (energia e espera), `NetworkMembers`/`NetworkMember`/`MemberKind` (blocos entrelaçados), `BlockLocation`; `TickBudget`, `Backoff` |
+| `storage/` | `Amounts` (aritmética saturada), `ResourcePool` (recurso → quantidade, capacidade, mudanças para sync), `ItemKey`/`FluidKey` (identidade do recurso, sem quantidade), `QuantityFormat` (1.2k, 3.4M ... 9.2E) |
+| `grid/` | `QuantumNetworks` (`SavedData` com todas as redes) sobre `NetworkDirectory` (qual rede um Núcleo assume, Núcleo mais próximo), `NetworkRecord`, `NetworkPower` (energia e espera), `NetworkMembers`/`NetworkMember`/`MemberKind` (blocos entrelaçados), `NetworkStorage` (pools e órfãos), `BlockLocation`; `TickBudget`, `Backoff` |
 | `block/` | `EntangledBlock` + `EntangledBlockEntity`: base de todo bloco que entra numa rede |
-| `block/matrix/` | `SuperpositionMatrixBlock` (1×2) e o block entity |
-| `item/` | `EntanglerItem` |
+| `block/matrix/` | `SuperpositionMatrixBlock` (1×2), o block entity, `MatrixModules` (encaixes e capacidade), `MatrixInteractions` (cliques e mensagens) |
+| `item/` | `EntanglerItem`, `QubitModuleItem` |
 | `network/` | `ModNetwork`, `EntanglementLinesPayload`, `EntanglementBroadcaster` (manda as ligações 1×/s) |
 | `client/` | `ClientPayloadHandler`, `EntanglementLines` (partículas) |
 | `block/core/` | `QuantumCoreBlock` (centro), `CoreStructureBlock` (os 26 em volta), `QuantumCoreBlockEntity`, `CoreEnergyStorage` (FE), `QuantumCoreItem` (coloca com o clicado como base), `CoreFootprint` (geometria) |

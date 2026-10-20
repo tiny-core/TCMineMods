@@ -9,7 +9,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 import org.jetbrains.annotations.Nullable;
 import org.tinycore.quantum.TcQuantum;
+import org.tinycore.quantum.storage.FluidKey;
+import org.tinycore.quantum.storage.ItemKey;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -18,7 +21,8 @@ import java.util.UUID;
  * arquivo no save quando {@link #setDirty()} foi chamado.
  *
  * <p>É a "casca" de disco do {@link NetworkDirectory} (onde está a regra). Um arquivo só para o servidor inteiro,
- * guardado no overworld, porque uma rede pode ter blocos em várias dimensões.
+ * guardado no overworld, porque uma rede pode ter blocos em várias dimensões. Grava energia, membros e o conteúdo
+ * ({@link NetworkStorage}); item ou fluido que não dá para ler fica guardado como estava (órfão), nunca é apagado.
  */
 public final class QuantumNetworks extends SavedData {
 
@@ -62,6 +66,7 @@ public final class QuantumNetworks extends SavedData {
             return false;
         }
         if (record.members().put(member)) {
+            record.refreshCapacities();
             setDirty();
         }
         return true;
@@ -71,6 +76,7 @@ public final class QuantumNetworks extends SavedData {
     public void removeMember(UUID id, BlockLocation location) {
         NetworkRecord record = directory.get(id);
         if (record != null && record.members().remove(location)) {
+            record.refreshCapacities();
             setDirty();
         }
     }
@@ -106,6 +112,8 @@ public final class QuantumNetworks extends SavedData {
                 members.add(m);
             }
             entry.put("members", members);
+            entry.put("items", saveItems(record.storage(), registries));
+            entry.put("fluids", saveFluids(record.storage(), registries));
             list.add(entry);
         }
         tag.put("networks", list);
@@ -135,8 +143,62 @@ public final class QuantumNetworks extends SavedData {
                 record.members().put(new NetworkMember(
                         new BlockLocation(m.getString("dim"), m.getLong("pos")), kind, m.getLong("capacity")));
             }
+            loadItems(record.storage(), entry.getList("items", Tag.TAG_COMPOUND), registries);
+            loadFluids(record.storage(), entry.getList("fluids", Tag.TAG_COMPOUND), registries);
+            record.refreshCapacities();
             networks.directory.put(record);
         }
         return networks;
+    }
+
+    // ---------------------------------------------------------------- conteúdo (itens e fluidos)
+
+    private static ListTag saveItems(NetworkStorage storage, HolderLookup.Provider registries) {
+        ListTag list = new ListTag();
+        storage.items().forEach((key, amount) -> list.add(entry(key.save(registries), amount)));
+        storage.orphanItems().forEach(orphan -> list.add(orphan.copy()));
+        return list;
+    }
+
+    private static ListTag saveFluids(NetworkStorage storage, HolderLookup.Provider registries) {
+        ListTag list = new ListTag();
+        storage.fluids().forEach((key, amount) -> list.add(entry(key.save(registries), amount)));
+        storage.orphanFluids().forEach(orphan -> list.add(orphan.copy()));
+        return list;
+    }
+
+    private static CompoundTag entry(Tag resource, long amount) {
+        CompoundTag entry = new CompoundTag();
+        entry.put("res", resource);
+        entry.putLong("amount", amount);
+        return entry;
+    }
+
+    private static void loadItems(NetworkStorage storage, ListTag list, HolderLookup.Provider registries) {
+        for (Tag element : list) {
+            CompoundTag entry = (CompoundTag) element;
+            Optional<ItemKey> key = ItemKey.parse(registries, entry.get("res"));
+            if (key.isPresent()) {
+                storage.items().restore(key.get(), entry.getLong("amount"));
+            } else {
+                TcQuantum.LOG.warn("Item guardado na rede não pôde ser lido (mod removido?); mantido como estava: {}",
+                        entry);
+                storage.addOrphanItem(entry.copy());
+            }
+        }
+    }
+
+    private static void loadFluids(NetworkStorage storage, ListTag list, HolderLookup.Provider registries) {
+        for (Tag element : list) {
+            CompoundTag entry = (CompoundTag) element;
+            Optional<FluidKey> key = FluidKey.parse(registries, entry.get("res"));
+            if (key.isPresent()) {
+                storage.fluids().restore(key.get(), entry.getLong("amount"));
+            } else {
+                TcQuantum.LOG.warn("Fluido guardado na rede não pôde ser lido (mod removido?); mantido como estava: {}",
+                        entry);
+                storage.addOrphanFluid(entry.copy());
+            }
+        }
     }
 }

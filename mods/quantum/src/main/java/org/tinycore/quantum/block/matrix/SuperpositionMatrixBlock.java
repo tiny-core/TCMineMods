@@ -4,6 +4,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -24,11 +28,13 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.tinycore.quantum.block.EntangledBlock;
 import org.tinycore.quantum.block.core.QuantumCoreBlockEntity;
 import org.tinycore.quantum.grid.NetworkRecord;
+import org.tinycore.quantum.item.QubitModuleItem;
 
 /**
  * <b>TC Matriz de Superposição (Itens)</b>: soma capacidade de itens à rede em que estiver entrelaçada. Não guarda
@@ -39,6 +45,9 @@ import org.tinycore.quantum.grid.NetworkRecord;
  * metade quebra as duas; o item sai só da de baixo (loot table). {@link #FACING} = para onde a frente olha.
  *
  * <p>Colocada perto de um Núcleo, entra sozinha na rede dele ({@code autoEntangleRadius}); senão, pelo Entrelaçador.
+ *
+ * <p>Módulos de Qubits: clique com o módulo na Matriz encaixa; Shift + clique com a mão vazia tira o último; clique
+ * com a mão vazia mostra módulos, capacidade e a ocupação da rede. Quebrar a Matriz derruba os módulos.
  */
 public class SuperpositionMatrixBlock extends Block implements EntityBlock, EntangledBlock {
 
@@ -151,14 +160,62 @@ public class SuperpositionMatrixBlock extends Block implements EntityBlock, Enta
         return super.playerWillDestroy(level, pos, state, player);
     }
 
-    /** A metade de baixo saiu do mundo: a rede perde a capacidade desta Matriz. */
+    /** A metade de baixo saiu do mundo: derruba os módulos e a rede perde a capacidade desta Matriz. */
     @Override
     protected void onRemove(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos,
                             @NotNull BlockState newState, boolean movedByPiston) {
         if (!state.is(newState.getBlock()) && level instanceof ServerLevel server
                 && level.getBlockEntity(pos) instanceof SuperpositionMatrixBlockEntity matrix) {
+            for (int tier : matrix.modules().installed()) {
+                Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(),
+                        MatrixInteractions.moduleStack(tier));
+            }
             matrix.onRemoved(server);
         }
         super.onRemove(state, level, pos, newState, movedByPiston);
+    }
+
+    // ---------------------------------------------------------------- módulos e estado
+
+    /** Clique com um Módulo de Qubits: encaixa no primeiro encaixe vazio. Outros itens seguem o clique normal. */
+    @Override
+    protected @NotNull ItemInteractionResult useItemOn(@NotNull ItemStack stack, @NotNull BlockState state,
+                                                       @NotNull Level level, @NotNull BlockPos pos,
+                                                       @NotNull Player player, @NotNull InteractionHand hand,
+                                                       @NotNull BlockHitResult hit) {
+        if (!(stack.getItem() instanceof QubitModuleItem module)) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+        if (level.isClientSide) {
+            return ItemInteractionResult.SUCCESS;
+        }
+        if (!(level.getBlockEntity(entanglementPos(pos, state)) instanceof SuperpositionMatrixBlockEntity matrix)) {
+            return ItemInteractionResult.FAIL;
+        }
+        if (!matrix.insertModule(module.tier())) {
+            player.displayClientMessage(Component.translatable("message.tcquantum.matrix.full"), true);
+            return ItemInteractionResult.CONSUME;
+        }
+        stack.consume(1, player);
+        MatrixInteractions.moduleInserted(matrix, player);
+        return ItemInteractionResult.CONSUME;
+    }
+
+    /** Mão vazia: Shift tira o último módulo; sem Shift, mostra o estado da Matriz e da rede. */
+    @Override
+    protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, Level level, @NotNull BlockPos pos,
+                                                        @NotNull Player player, @NotNull BlockHitResult hit) {
+        if (level.isClientSide) {
+            return InteractionResult.SUCCESS;
+        }
+        if (!(level.getBlockEntity(entanglementPos(pos, state)) instanceof SuperpositionMatrixBlockEntity matrix)) {
+            return InteractionResult.PASS;
+        }
+        if (player.isShiftKeyDown()) {
+            MatrixInteractions.removeModule(matrix, player);
+        } else {
+            MatrixInteractions.sendStatus(matrix, player);
+        }
+        return InteractionResult.CONSUME;
     }
 }

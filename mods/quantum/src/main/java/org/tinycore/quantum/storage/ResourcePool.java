@@ -129,6 +129,22 @@ public final class ResourcePool<K> {
         return removed;
     }
 
+    /**
+     * Recoloca uma quantidade lida do disco, <b>sem</b> olhar a capacidade: o que estava guardado volta inteiro, mesmo
+     * que a rede tenha ficado acima da capacidade (módulo tirado). Só para carregar; o jogo usa {@link #insert}.
+     * Não marca mudança (nada mudou para o jogador).
+     */
+    public void restore(@NotNull K key, long amount) {
+        Objects.requireNonNull(key);
+        if (amount <= 0) {
+            return;
+        }
+        long current = amounts.getLong(key);
+        long added = Math.min(amount, Amounts.subtract(Amounts.MAX, current));
+        amounts.put(key, current + added);
+        stored = Amounts.add(stored, added);
+    }
+
     /** Percorre tudo o que está guardado, sem criar objetos por entrada ({@code fastIterable}). */
     public void forEach(@NotNull ObjLongConsumer<K> action) {
         for (Object2LongMap.Entry<K> entry : Object2LongMaps.fastIterable(amounts)) {

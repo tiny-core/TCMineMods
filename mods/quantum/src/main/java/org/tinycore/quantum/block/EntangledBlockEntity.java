@@ -89,6 +89,25 @@ public abstract class EntangledBlockEntity extends BlockEntity {
         return nearest != null && entangle(level, nearest.id()) ? nearest : null;
     }
 
+    /**
+     * O tipo ou a capacidade deste bloco mudou (módulo encaixado ou tirado): atualiza a vaga dele na rede, que
+     * recalcula a capacidade dos pools.
+     */
+    protected void refreshMembership() {
+        if (networkId != null && level instanceof ServerLevel server) {
+            QuantumNetworks.get(server).addMember(networkId,
+                    new NetworkMember(location(server), memberKind(), memberCapacity()));
+        }
+    }
+
+    /** Rede deste bloco, se estiver entrelaçado e a rede existir. Só no servidor. */
+    public @Nullable NetworkRecord network() {
+        if (networkId == null || !(level instanceof ServerLevel server)) {
+            return null;
+        }
+        return QuantumNetworks.get(server).get(networkId);
+    }
+
     /** O bloco saiu do mundo: deixa de contar na rede. */
     public void onRemoved(ServerLevel level) {
         if (networkId != null) {

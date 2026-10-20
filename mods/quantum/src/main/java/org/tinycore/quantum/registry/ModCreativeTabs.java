@@ -23,6 +23,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.QUANTUM_CORE.get());
                         output.accept(ModItems.ENTANGLER.get());
                         output.accept(ModItems.SUPERPOSITION_MATRIX.get());
+                        ModItems.QUBIT_MODULES.forEach(module -> output.accept(module.get()));
                     })
                     .build());
 

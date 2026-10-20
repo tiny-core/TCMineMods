@@ -66,7 +66,9 @@ public class QuantumCoreBlockEntity extends BlockEntity {
      * Block entity do Núcleo a partir de qualquer um dos 27 blocos do cubo (o Entrelaçador clica em qualquer parte).
      */
     public static @Nullable QuantumCoreBlockEntity at(Level level, BlockPos pos, BlockState state) {
-        BlockPos center = state.getBlock() instanceof CoreStructureBlock ? CoreStructureBlock.centerOf(pos, state) : pos;
+        BlockPos center = state.getBlock() instanceof CoreStructureBlock
+                ? CoreStructureBlock.centerOf(pos, state)
+                : pos;
         return level.getBlockEntity(center) instanceof QuantumCoreBlockEntity core ? core : null;
     }
 
@@ -162,9 +164,12 @@ public class QuantumCoreBlockEntity extends BlockEntity {
                 QuantityFormat.compact(energyCapacity()),
                 QuantityFormat.compact(Config.CORE_ENERGY_PER_TICK.get()),
                 shortId(record.id())), false);
+        var items = record.storage().items();
         player.displayClientMessage(Component.translatable("message.tcquantum.core.members",
                 members.count(MemberKind.ITEM_MATRIX),
-                QuantityFormat.compact(members.capacity(MemberKind.ITEM_MATRIX))), false);
+                QuantityFormat.compact(items.stored()),
+                QuantityFormat.compact(items.capacity()),
+                items.types()), false);
     }
 
     /** Primeiros 8 caracteres do id: o bastante para o jogador diferenciar as redes. */

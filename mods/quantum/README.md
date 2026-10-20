@@ -4,7 +4,7 @@ Armazenamento e automação **sem cabos** para NeoForge 1.21.1 (ATM10). Um **Nú
 outros blocos ficam entrelaçados com ele em qualquer ponto da base. Números gigantes (até 9,2 quintilhões por
 recurso), crafts de mesa e de máquinas, e o **Observatório**, que mostra o que a rede consegue fabricar agora.
 
-> Em desenvolvimento — fase 1 (fatia 1.3: Entrelaçador e Matriz). Plano, telas e modelos: `docs/PLANO.md`.
+> Em desenvolvimento — fase 1 (fatia 1.4: Módulos de Qubits e armazenamento salvo no mundo). Plano, telas e modelos: `docs/PLANO.md`.
 
 ## TC Núcleo Quântico
 
@@ -36,10 +36,22 @@ Blocos colocados até `autoEntangleRadius` blocos de um Núcleo entram sozinhos 
 
 ## TC Matriz de Superposição (Itens)
 
-Dois blocos de altura; soma `matrixItemCapacity` itens à capacidade da rede em que estiver. Não guarda itens ela
-mesma: o conteúdo é da rede, e a capacidade continua a contar com o chunk da Matriz descarregado. Clique no Núcleo
-para ver quantas Matrizes a rede tem e a capacidade total. Guardar e tirar itens chega com o Terminal (fatia 1.5);
-os Módulos de Qubits, que aumentam a capacidade, na 1.4.
+Dois blocos de altura; soma capacidade de itens à rede em que estiver. Não guarda itens ela mesma: o conteúdo é da
+rede, e a capacidade continua a contar com o chunk da Matriz descarregado.
+
+- **Clique com a mão vazia:** módulos encaixados, capacidade da Matriz e a ocupação da rede.
+- **Clique com um Módulo de Qubits:** encaixa (4 encaixes). **Shift + clique com a mão vazia:** tira o último.
+- **Quebrar:** cai a Matriz e os módulos que estavam nela.
+
+Capacidade de uma Matriz = `matrixItemCapacity` + a soma dos módulos. Padrões: I = 262k, II = 2M, III = 16M,
+IV = 134M, V = 1G itens por módulo (uma Matriz com 4 módulos V guarda ~4,3 mil milhões de itens).
+
+Tirar módulos com a rede cheia deixa a rede **acima da capacidade**: nada se perde, só não entra nada novo até
+sobrar espaço. Guardar e tirar itens chega com o Terminal (fatia 1.5).
+
+## TC Módulo de Qubits I–V
+
+Aumenta a capacidade de uma Matriz (ver acima). O tooltip mostra quanto cada módulo soma.
 
 ## Modelos
 
@@ -63,5 +75,6 @@ raiz depois de `./gradlew build`).
 | `coreEnergyPerTick` | 16 | Consumo base da rede (FE/t). 0 = sem consumo. |
 | `standbyResumeTicks` | 100 | Em espera, a rede só volta com energia para este número de ticks de consumo. |
 | `matrixItemCapacity` | 65536 | Itens que cada Matriz soma à rede (sem módulos). |
+| `qubitModule1Capacity` … `qubitModule5Capacity` | 262144 … 1073741824 | Itens que cada módulo encaixado soma à Matriz. |
 | `autoEntangleRadius` | 16 | Bloco colocado até esta distância de um Núcleo entra sozinho na rede. 0 = só pelo Entrelaçador. |
 | `entangleLinesRange` | 48 | Distância (blocos) das ligações mostradas com o Entrelaçador na mão. |

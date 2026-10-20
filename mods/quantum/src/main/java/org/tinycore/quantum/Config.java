@@ -39,16 +39,35 @@ public final class Config {
             .comment("Capacidade de itens que cada Matriz de Superposição (Itens) soma à rede, sem módulos.")
             .defineInRange("matrixItemCapacity", 65_536L, 1L, Long.MAX_VALUE);
 
+    public static final ModConfigSpec.LongValue QUBIT_MODULE_1 = qubitModule(1, 262_144L);
+    public static final ModConfigSpec.LongValue QUBIT_MODULE_2 = qubitModule(2, 2_097_152L);
+    public static final ModConfigSpec.LongValue QUBIT_MODULE_3 = qubitModule(3, 16_777_216L);
+    public static final ModConfigSpec.LongValue QUBIT_MODULE_4 = qubitModule(4, 134_217_728L);
+    public static final ModConfigSpec.LongValue QUBIT_MODULE_5 = qubitModule(5, 1_073_741_824L);
+
     public static final ModConfigSpec.IntValue AUTO_ENTANGLE_RADIUS = B
             .comment("Um bloco do mod colocado até esta distância (em blocos) de um Núcleo entra sozinho na rede dele.",
                     "0 = desligado (só pelo Entrelaçador).")
             .defineInRange("autoEntangleRadius", 16, 0, 256);
 
     public static final ModConfigSpec.IntValue ENTANGLE_LINES_RANGE = B
-            .comment("Com o Entrelaçador na mão, mostra as ligações dos blocos até esta distância (em blocos) do jogador.")
+            .comment("Com o Entrelaçador na mão, mostra as ligações dos blocos até esta distância (em blocos)",
+                    "do jogador.")
             .defineInRange("entangleLinesRange", 48, 8, 128);
 
     public static final ModConfigSpec SPEC = B.build();
+
+    /** Capacidade que cada nível de Módulo de Qubits soma à Matriz ({@code [0]} = nível I). */
+    public static long[] qubitModuleCapacities() {
+        return new long[]{QUBIT_MODULE_1.get(), QUBIT_MODULE_2.get(), QUBIT_MODULE_3.get(),
+                QUBIT_MODULE_4.get(), QUBIT_MODULE_5.get()};
+    }
+
+    private static ModConfigSpec.LongValue qubitModule(int tier, long defaultCapacity) {
+        return B.comment("Itens que cada Módulo de Qubits " + tier + " encaixado soma à Matriz",
+                        "(4 encaixes por Matriz).")
+                .defineInRange("qubitModule" + tier + "Capacity", defaultCapacity, 1L, Long.MAX_VALUE);
+    }
 
     private Config() {}
 }

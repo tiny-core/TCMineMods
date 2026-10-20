@@ -120,4 +120,25 @@ class ResourcePoolTest {
         assertEquals(10, copy.getLong("ferro"));
         assertEquals(0, copy.getLong("nada"));
     }
+
+    @Test
+    void restoreIgnoresCapacityAndKeepsEverything() {
+        ResourcePool<String> pool = new ResourcePool<>();
+        pool.setCapacity(10);
+        pool.restore("ferro", 25);
+        pool.restore("ouro", 5);
+        assertEquals(25, pool.amount("ferro"));
+        assertEquals(30, pool.stored());
+        assertTrue(pool.overCapacity(), "acima da capacidade: nada se perde, mas nada entra");
+        assertEquals(0, pool.insert("ferro", 1, false));
+        assertFalse(pool.hasChanges(), "carregar não é mudança");
+    }
+
+    @Test
+    void restoreSaturatesAtTheLongLimit() {
+        ResourcePool<String> pool = new ResourcePool<>();
+        pool.restore("ferro", Long.MAX_VALUE);
+        pool.restore("ferro", 10);
+        assertEquals(Long.MAX_VALUE, pool.amount("ferro"));
+    }
 }
