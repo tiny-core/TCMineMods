@@ -39,7 +39,9 @@ TCMineMods/
 
 ## Build
 
-Precisa só de um JDK 21+ para rodar o Gradle (o Gradle baixa sozinho o JDK 21 do projeto).
+O Gradle roda sempre com o **JDK 21** (`gradle/gradle-daemon-jvm.properties`), mesmo que a máquina tenha um Java mais
+novo: precisa de um JDK 21 instalado (ou já baixado pelo Gradle em `~/.gradle/jdks`). No IntelliJ: *Settings → Build →
+Build Tools → Gradle → Gradle JVM* = 21.
 
 ```bash
 ./gradlew build                      # compila e testa tudo; jars em build/libs/
