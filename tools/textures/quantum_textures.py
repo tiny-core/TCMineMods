@@ -23,10 +23,10 @@ SIZE = 16
 
 # nome: (cor base, variação do ruído, riscos horizontais de metal escovado)
 MATERIALS = {
-    "metal": ("#68717F", 11, True),
-    "frame": ("#3F4754", 9, False),
-    "dark": ("#262B34", 7, False),
-    "panel": ("#2E3542", 8, False),
+    "metal": ("#4A515D", 10, True),
+    "frame": ("#30363F", 8, False),
+    "dark": ("#1C2027", 6, False),
+    "panel": ("#242A33", 7, False),
     "trim": ("#F97316", 13, False),
 }
 

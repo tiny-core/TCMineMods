@@ -40,10 +40,12 @@ parte brilhar, basta usar uma textura cujo nome começa com `glow_`.
 | `block/superposition_matrix_upper.json` | Metade de cima da Matriz | — | — | vazio de propósito (o modelo inteiro sai da metade de baixo) |
 | `item/superposition_matrix.json` | Matriz (item) | — | — | modelo do bloco reduzido (`display`) |
 
-**Efeitos já feitos (V1):** Núcleo (esfera, 3 anéis, qubits; `client/render/CoreEffectsRenderer`) e Matriz (partículas
+**Efeitos já feitos (V1):** Núcleo (esfera de voxels, 3 anéis, qubits, orbes das gaiolas e auréola;
+`client/render/CoreEffectsRenderer`) e Matriz (partículas
 nas câmaras, LEDs, medidores e luz de estado; `client/render/MatrixEffectsRenderer`). Os da Matriz são desenhados **por
 cima** das peças do modelo, nas posições delas: se mover câmaras, LEDs ou segmentos no Blockbench, avise para
-atualizar as posições no código. Ainda faltam os feixes e a auréola do Núcleo.
+atualizar as posições no código (vale também para as gaiolas do topo dos pilares do Núcleo). Ainda faltam os feixes
+do Núcleo.
 
 A **frente** dos modelos de bloco com orientação (Matriz) é o lado **sul** (z = 16) do modelo; o blockstate gira a
 partir daí. O `item/entangler.json` (e o `item/portable_terminal.json`) ainda não tem `display`: no Blockbench, aba
