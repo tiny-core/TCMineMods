@@ -1,0 +1,34 @@
+// TC Quantum. Configuração comum de mod TC em ../gradle/tc-mod.gradle; aqui só o que é deste mod.
+apply from: rootProject.file('gradle/tc-mod.gradle')
+
+// O TC Core precisa estar configurado antes (usamos o sourceSet dele nas execuções de dev).
+evaluationDependsOn(':core')
+
+neoForge {
+    runs {
+        client {
+            client()
+        }
+        server {
+            server()
+            programArgument '--nogui'
+            // Porta opcional (-Pserver_port=25570), para quando a 25565 já está em uso na máquina.
+            if (project.findProperty('server_port')) {
+                programArgument '--port'
+                programArgument project.findProperty('server_port').toString()
+            }
+        }
+    }
+
+    mods {
+        // Em dev o core roda junto, como mod separado (igual no ATM10).
+        tccore {
+            sourceSet(project(':core').sourceSets.main)
+        }
+    }
+}
+
+dependencies {
+    // TC Core: biblioteca comum dos mods TC (mod separado em jogo).
+    implementation project(':core')
+}

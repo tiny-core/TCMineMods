@@ -1,6 +1,6 @@
 # Plano — TC Quantum (`tcquantum`)
 
-> Estado: **fase 0 (desenho)**, revisão 2. Nada de código ainda. Este documento fecha as mecânicas,
+> Estado: **fase 1 em curso** (fatia 1.1: módulo `mods/quantum/`, config e domínio puro). Telas e modelos fechados na fase 0.
 > as telas e os modelos antes da primeira linha, para não termos de voltar à interface depois.
 >
 > Revisão 2: tema de física quântica; números gigantes; Links completos (energia, redstone, fluidos,
@@ -99,6 +99,22 @@ O Integrated Dynamics mostra números enormes; o que importa para nós é **guar
 exato no tooltip. Totais da rede inteira (soma de todos os tipos) podem passar de 9,2 Qi e por isso
 usam `double` só para exibição.
 
+**Limites do Java e do Minecraft (fronteiras).** 9,2 quintilhões é o maior número inteiro que o Java guarda
+num `long`; não há como passar disso sem `BigInteger`, por isso é o teto do pool (saturação). Fora do pool, o
+Minecraft e os outros mods usam limites menores, e a rede **nunca** os ultrapassa:
+
+| Onde | Tipo | Limite | Como a rede lida |
+|---|---|---|---|
+| Pilha de itens (`ItemStack`), inventários e canos (`IItemHandler`) | `int` + tamanho da pilha | 2 147 483 647, e no máximo 99 por pilha (64 na maioria dos itens) | entrega em pilhas do tamanho certo, várias por operação |
+| Fluidos (`FluidStack`, `IFluidHandler`) | `int` em mB | 2 147 483 647 mB por operação | divide em partes de até `Integer.MAX_VALUE` |
+| Energia (`IEnergyStorage`) | `int` em FE | 2 147 483 647 FE por chamada | divide por tick; o buffer da rede é `long` |
+| Químicos do Mekanism | `long` | 9,2 quintilhões | direto |
+| Comparador / redstone | 0–15 | — | proporcional (Emissor de Nível) |
+| NBT e pacotes de rede | `long` (LongTag, VarLong) | 9,2 quintilhões | direto |
+
+Regra no código: toda passagem do pool para uma API do jogo ou de outro mod usa `Amounts.toInt`, que corta
+no máximo do `int`, e nunca assume mais do que a API aceita.
+
 ## 3. Motor de crafts e o Observatório
 
 ### 3.1 De onde vêm as receitas (correção da revisão 1)
@@ -169,6 +185,28 @@ o próprio Núcleo faz. Falta de ingrediente a meio: o craft fica "aguardando" c
 **Inteligência extra:** se a máquina tiver vários slots de entrada iguais (ex.: fábrica de 5 do
 Mekanism), a Âncora divide o lote entre eles; se a máquina parar de produzir (falta de energia,
 saída cheia), a Âncora marca o motivo e o planejador escolhe outra máquina igual se houver.
+
+### 3.5 Máquinas repetidas: grupos e divisão de carga
+
+A rede deteta sozinha as máquinas iguais e reparte o trabalho entre elas.
+
+- **Grupo automático:** Âncoras cujas máquinas têm a mesma **assinatura** (bloco + tipos de receita
+  reconhecidos) formam um grupo, sem o jogador configurar nada. Tiers diferentes da mesma máquina (Enriquecedor
+  básico e de elite) ficam no mesmo grupo, com **pesos** diferentes. A aba "Máquina" da Âncora mostra
+  "Grupo: Serra de Precisão × 4 (2 elite, 2 básica)".
+- **Divisão proporcional:** um pedido de N operações é dividido pelas máquinas livres do grupo na proporção da
+  velocidade de cada uma. A velocidade começa pela estimativa do adaptador (tier, melhorias) e passa a ser a
+  **medida** (operações por segundo observadas), que acerta sozinha máquinas com melhorias de outros mods.
+- **Fábricas e slots paralelos:** uma fábrica de 5 linhas do Mekanism conta como 5 trabalhadores.
+- **Limites reais:** cada máquina só recebe o que cabe nas entradas dela (simulação); o resto fica na fila e vai
+  para quem libertar espaço primeiro.
+- **Lote mínimo** (config): não divide trabalho tão pequeno que o custo de mover seja maior do que o ganho.
+- **Máquina parada** (sem energia, saída cheia, multibloco desmontado): peso zero até voltar; o trabalho que
+  ainda não foi enviado passa para as outras. O que já está dentro dela fica lá e termina quando ela voltar.
+- **Prioridade** (tela da Âncora): decide a ordem quando o trabalho cabe em menos máquinas do que o grupo tem;
+  com carga grande, todas trabalham.
+- **Código:** regra pura `crafting/exec/LoadBalancer` (recebe pesos, espaços livres e N; devolve quanto vai para
+  cada máquina), com testes JUnit; entra na fase 4, junto com a Âncora de Máquina.
 
 ## 4. Blocos e itens
 
@@ -412,7 +450,7 @@ JEI/EMI, Create, Thermal...
 | 1 | Núcleo, Entrelaçador, pools Itens+Fluidos, Matrizes + Módulos, Terminal (Rede), segurança | guardar e retirar sem cabos |
 | 2 | Interface, Âncora de Inventário, **Bateria** e energia na rede | baús e canos ligados; rede com energia |
 | 3 | Fabricação, Codificador, crafts de mesa, Processador | autocraft de mesa |
-| 4 | **Âncora de Máquina** (reconhecimento, canais itens/fluidos/energia/redstone), adaptadores vanilla e Mekanism, aprendizado de chances | autocraft com máquinas |
+| 4 | **Âncora de Máquina** (reconhecimento, canais itens/fluidos/energia/redstone), **grupos de máquinas iguais e divisão de carga**, adaptadores vanilla e Mekanism, aprendizado de chances | autocraft com máquinas |
 | 5 | **Observatório**, Regulador, Emissor, Portátil, Painel | a vitrine do mod |
 | 6 | Matriz Química, radioativos, canal de químicos nas Âncoras | químicos e resíduo nuclear |
 | 7 | JEI/EMI como guia, Create/Thermal/IE (multiblocos), Colocador/Quebrador, Túnel, CC:Tweaked, Pontes | compatibilidade ampla |

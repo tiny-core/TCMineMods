@@ -11,7 +11,8 @@ tc_minecraft_mods/
 ├── mods/
 │   ├── core/                # TC Core (tccore): biblioteca comum — mod separado em jogo
 │   ├── colony-bridge/       # TC Colony Bridge (tccolonybridge): AE2 ↔ MineColonies
-│   └── cloud-storage/       # TC Cloud Storage (tccloud): itens na nuvem do TCMine via AE2 (em desenvolvimento)
+│   ├── cloud-storage/       # TC Cloud Storage (tccloud): itens na nuvem do TCMine via AE2 (em desenvolvimento)
+│   └── quantum/             # TC Quantum (tcquantum): armazenamento e automação sem cabos (em desenvolvimento)
 ```
 Planejado: mod de reatores do Mekanism, no mesmo estilo (ver README.md, "Criar um mod novo").
 

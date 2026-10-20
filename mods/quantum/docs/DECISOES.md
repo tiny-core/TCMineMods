@@ -1,0 +1,14 @@
+# Registro de decisões — TC Quantum
+
+Decisões de arquitetura deste mod. As do workspace ficam no `docs/DECISOES.md` da raiz; o desenho completo
+(telas, modelos, fases) está em `docs/planos/tc-quantum.md`.
+
+| Data | Decisão | Motivo | Alternativas descartadas |
+|---|---|---|---|
+| 2026-10-20 | Armazenamento em **pool por tipo de recurso** (`ResourcePool`), dentro do Núcleo; Matrizes só somam capacidade | Inserir/extrair O(1), sem procurar disco por prioridade; um bloco num chunk descarregado não faz itens sumirem | Células com conteúdo próprio e prioridade, como no AE2 (mais lento e frágil a chunks descarregados) |
+| 2026-10-20 | Quantidades em **`long` com saturação** (`Amounts`), máximo 9,2 quintilhões por recurso | Números gigantes com o custo de uma soma comum da CPU | `BigInteger` (objeto novo por soma, 10–50× mais lento, lixo para o GC); `int` (2,1 mil milhões é pouco) |
+| 2026-10-20 | Mapa de primitivos do **fastutil** (`Object2LongOpenHashMap`) no pool | Já vem com o Minecraft; guarda o `long` sem criar `Long` por entrada | `HashMap<K, Long>` (um objeto por quantidade) |
+| 2026-10-20 | **Orçamento de tempo por tick** por rede (`TickBudget`, padrão 2 ms) e **espera com recuo** (`Backoff`) nos blocos ociosos | A rede nunca faz o mundo esperar; blocos sem trabalho quase não gastam tick | Trabalho a cada N ticks fixo (desperdiça tick quando ocioso e atrasa quando há muito trabalho) |
+| 2026-10-20 | Config **COMMON** | Nada da config precisa ir para os clientes | Config SERVER (sincronizada para todos) |
+| 2026-10-20 | Teto do pool = maior `long` do Java; **fronteiras em `int`** com `Amounts.toInt` (pilhas, fluidos em mB, energia FE) | O Minecraft e a maioria dos mods só aceitam `int` por operação; passar disso estraga inventários e pode duplicar ou perder itens | Assumir que as APIs aceitam `long` (só os químicos do Mekanism aceitam) |
+| 2026-10-20 | **Grupos automáticos de máquinas iguais** e divisão de carga proporcional à velocidade medida (`crafting/exec/LoadBalancer`, fase 4) | O jogador não configura nada e máquinas repetidas trabalham em paralelo; a velocidade medida acerta tiers e melhorias de qualquer mod | Uma máquina por receita (fila longa); divisão igual entre todas (máquina lenta atrasa o pedido) |
