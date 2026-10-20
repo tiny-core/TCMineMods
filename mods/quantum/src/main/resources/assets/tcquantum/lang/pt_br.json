@@ -8,5 +8,19 @@
   "message.tcquantum.core.no_room": "O Núcleo Quântico precisa de um espaço livre de 3×3×3",
   "message.tcquantum.core.status": "Núcleo Quântico: %s · energia %s / %s FE · consumo %s FE/t · rede %s",
   "message.tcquantum.core.online": "ligado",
-  "message.tcquantum.core.standby": "em espera (sem energia)"
+  "message.tcquantum.core.standby": "em espera (sem energia)",
+  "block.tcquantum.superposition_matrix": "TC Matriz de Superposição (Itens)",
+  "item.tcquantum.entangler": "TC Entrelaçador",
+  "message.tcquantum.core.members": "Matrizes de Superposição: %s · capacidade de itens %s",
+  "message.tcquantum.entangle.tuned": "Entrelaçador sintonizado com a rede %s",
+  "message.tcquantum.entangle.linked": "%s entrou na rede %s",
+  "message.tcquantum.entangle.already": "%s já está na rede %s",
+  "message.tcquantum.entangle.unlinked": "%s saiu da rede",
+  "message.tcquantum.entangle.not_tuned": "Clique primeiro num Núcleo Quântico para sintonizar o Entrelaçador",
+  "message.tcquantum.entangle.missing": "Essa rede não existe mais",
+  "message.tcquantum.entangle.cleared": "O Entrelaçador esqueceu a rede",
+  "message.tcquantum.entangle.auto": "%s entrou na rede %s (Núcleo Quântico próximo)",
+  "tooltip.tcquantum.entangler.untuned": "Clique num Núcleo Quântico para sintonizar",
+  "tooltip.tcquantum.entangler.tuned": "Rede %s",
+  "tooltip.tcquantum.entangler.usage": "Clique num bloco: liga · Shift+clique: tira · Shift+usar no ar: esquece"
 }

@@ -1,0 +1,9 @@
+{
+  "variants": {
+    "facing=south,half=lower": { "model": "tcquantum:block/superposition_matrix" },
+    "facing=west,half=lower": { "model": "tcquantum:block/superposition_matrix", "y": 90 },
+    "facing=north,half=lower": { "model": "tcquantum:block/superposition_matrix", "y": 180 },
+    "facing=east,half=lower": { "model": "tcquantum:block/superposition_matrix", "y": 270 },
+    "half=upper": { "model": "tcquantum:block/superposition_matrix_upper" }
+  }
+}

@@ -1,5 +1,6 @@
 package org.tinycore.quantum.grid;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -37,17 +38,47 @@ public final class QuantumNetworks extends SavedData {
     }
 
     /** Ver {@link NetworkDirectory#claim}. */
-    public NetworkRecord claim(@Nullable UUID requested, CoreLocation at) {
+    public NetworkRecord claim(@Nullable UUID requested, BlockLocation at) {
         NetworkRecord record = directory.claim(requested, at, UUID::randomUUID);
         setDirty();
         return record;
     }
 
     /** Ver {@link NetworkDirectory#detach}. */
-    public void detach(UUID id, CoreLocation at) {
+    public void detach(UUID id, BlockLocation at) {
         if (directory.detach(id, at)) {
             setDirty();
         }
+    }
+
+    /**
+     * Põe (ou atualiza) um bloco na rede.
+     *
+     * @return {@code false} se a rede não existe
+     */
+    public boolean addMember(UUID id, NetworkMember member) {
+        NetworkRecord record = directory.get(id);
+        if (record == null) {
+            return false;
+        }
+        if (record.members().put(member)) {
+            setDirty();
+        }
+        return true;
+    }
+
+    /** Tira um bloco da rede (quebrado ou desentrelaçado). */
+    public void removeMember(UUID id, BlockLocation location) {
+        NetworkRecord record = directory.get(id);
+        if (record != null && record.members().remove(location)) {
+            setDirty();
+        }
+    }
+
+    /** Rede com o Núcleo mais perto de {@code pos}, na mesma dimensão, até {@code radius} blocos. */
+    public @Nullable NetworkRecord nearestCore(String dimension, BlockPos pos, double radius) {
+        return directory.nearestCore(dimension,
+                core -> Math.sqrt(BlockPos.of(core.pos()).distSqr(pos)), radius);
     }
 
     // ---------------------------------------------------------------- NBT
@@ -60,11 +91,21 @@ public final class QuantumNetworks extends SavedData {
             entry.putUUID("id", record.id());
             entry.putLong("energy", record.power().stored());
             entry.putBoolean("online", record.power().online());
-            CoreLocation core = record.core();
+            BlockLocation core = record.core();
             if (core != null) {
                 entry.putString("coreDim", core.dimension());
                 entry.putLong("corePos", core.pos());
             }
+            ListTag members = new ListTag();
+            for (NetworkMember member : record.members().all()) {
+                CompoundTag m = new CompoundTag();
+                m.putString("dim", member.location().dimension());
+                m.putLong("pos", member.location().pos());
+                m.putString("kind", member.kind().name());
+                m.putLong("capacity", member.capacity());
+                members.add(m);
+            }
+            entry.put("members", members);
             list.add(entry);
         }
         tag.put("networks", list);
@@ -79,11 +120,22 @@ public final class QuantumNetworks extends SavedData {
                 TcQuantum.LOG.warn("Rede quântica sem id ignorada no {}.dat", FILE_NAME);
                 continue;
             }
-            CoreLocation core = entry.contains("coreDim", Tag.TAG_STRING)
-                    ? new CoreLocation(entry.getString("coreDim"), entry.getLong("corePos"))
+            BlockLocation core = entry.contains("coreDim", Tag.TAG_STRING)
+                    ? new BlockLocation(entry.getString("coreDim"), entry.getLong("corePos"))
                     : null;
-            networks.directory.put(new NetworkRecord(entry.getUUID("id"),
-                    new NetworkPower(entry.getLong("energy"), entry.getBoolean("online")), core));
+            NetworkRecord record = new NetworkRecord(entry.getUUID("id"),
+                    new NetworkPower(entry.getLong("energy"), entry.getBoolean("online")), core);
+            for (Tag memberTag : entry.getList("members", Tag.TAG_COMPOUND)) {
+                CompoundTag m = (CompoundTag) memberTag;
+                MemberKind kind = MemberKind.byName(m.getString("kind"));
+                if (kind == null) {
+                    TcQuantum.LOG.warn("Membro de rede com tipo desconhecido ignorado: {}", m.getString("kind"));
+                    continue;
+                }
+                record.members().put(new NetworkMember(
+                        new BlockLocation(m.getString("dim"), m.getLong("pos")), kind, m.getLong("capacity")));
+            }
+            networks.directory.put(record);
         }
         return networks;
     }

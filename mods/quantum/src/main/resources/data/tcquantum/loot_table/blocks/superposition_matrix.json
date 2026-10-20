@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        { "type": "minecraft:item", "name": "tcquantum:superposition_matrix" }
+      ],
+      "conditions": [
+        { "condition": "minecraft:survives_explosion" },
+        {
+          "condition": "minecraft:block_state_property",
+          "block": "tcquantum:superposition_matrix",
+          "properties": { "half": "lower" }
+        }
+      ]
+    }
+  ]
+}

@@ -21,8 +21,8 @@ class NetworkDirectoryTest {
     private static final UUID A = UUID.fromString("00000000-0000-0000-0000-00000000000a");
     private static final UUID B = UUID.fromString("00000000-0000-0000-0000-00000000000b");
     private static final UUID C = UUID.fromString("00000000-0000-0000-0000-00000000000c");
-    private static final CoreLocation HERE = new CoreLocation("minecraft:overworld", 10);
-    private static final CoreLocation THERE = new CoreLocation("minecraft:the_nether", 10);
+    private static final BlockLocation HERE = new BlockLocation("minecraft:overworld", 10);
+    private static final BlockLocation THERE = new BlockLocation("minecraft:the_nether", 10);
 
     private static Supplier<UUID> ids(UUID... values) {
         Deque<UUID> queue = new ArrayDeque<>(List.of(values));
@@ -90,5 +90,28 @@ class NetworkDirectoryTest {
         assertFalse(directory.detach(A, THERE));
         assertFalse(directory.detach(B, HERE));
         assertEquals(HERE, directory.get(A).core());
+    }
+
+    @Test
+    void nearestCoreInTheSameDimensionWithinTheRadius() {
+        NetworkDirectory directory = new NetworkDirectory();
+        BlockLocation near = new BlockLocation("minecraft:overworld", 5);
+        BlockLocation far = new BlockLocation("minecraft:overworld", 30);
+        BlockLocation otherDim = new BlockLocation("minecraft:the_nether", 1);
+        directory.claim(null, far, ids(A));
+        directory.claim(null, near, ids(B));
+        directory.claim(null, otherDim, ids(C));
+        // "distância" = valor do pos, para o teste não depender de BlockPos
+        assertEquals(B, directory.nearestCore("minecraft:overworld", l -> l.pos(), 16).id());
+        assertNull(directory.nearestCore("minecraft:overworld", l -> l.pos(), 4), "fora do raio");
+        assertEquals(C, directory.nearestCore("minecraft:the_nether", l -> l.pos(), 16).id());
+    }
+
+    @Test
+    void networkWithoutCoreIsNeverTheNearest() {
+        NetworkDirectory directory = new NetworkDirectory();
+        directory.claim(null, HERE, ids(A));
+        directory.detach(A, HERE);
+        assertNull(directory.nearestCore(HERE.dimension(), l -> 0, 16));
     }
 }

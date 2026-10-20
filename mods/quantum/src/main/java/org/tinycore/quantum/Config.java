@@ -35,6 +35,19 @@ public final class Config {
                     "de consumo (100 = 5 segundos). Evita que ela fique ligando e desligando com pouca entrada.")
             .defineInRange("standbyResumeTicks", 100, 1, 72_000);
 
+    public static final ModConfigSpec.LongValue MATRIX_ITEM_CAPACITY = B
+            .comment("Capacidade de itens que cada Matriz de Superposição (Itens) soma à rede, sem módulos.")
+            .defineInRange("matrixItemCapacity", 65_536L, 1L, Long.MAX_VALUE);
+
+    public static final ModConfigSpec.IntValue AUTO_ENTANGLE_RADIUS = B
+            .comment("Um bloco do mod colocado até esta distância (em blocos) de um Núcleo entra sozinho na rede dele.",
+                    "0 = desligado (só pelo Entrelaçador).")
+            .defineInRange("autoEntangleRadius", 16, 0, 256);
+
+    public static final ModConfigSpec.IntValue ENTANGLE_LINES_RANGE = B
+            .comment("Com o Entrelaçador na mão, mostra as ligações dos blocos até esta distância (em blocos) do jogador.")
+            .defineInRange("entangleLinesRange", 48, 8, 128);
+
     public static final ModConfigSpec SPEC = B.build();
 
     private Config() {}

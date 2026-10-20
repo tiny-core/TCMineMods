@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
+import java.util.function.ToDoubleFunction;
 
 /**
  * Todas as redes do servidor, por id. Regra pura: decide qual rede um Núcleo recém-colocado assume. Quem guarda
@@ -41,7 +42,7 @@ public final class NetworkDirectory {
      * @param newIds    gerador de ids (no jogo, {@code UUID::randomUUID}; nos testes, ids fixos)
      * @return a rede assumida (existente ou nova)
      */
-    public NetworkRecord claim(@Nullable UUID requested, CoreLocation at, Supplier<UUID> newIds) {
+    public NetworkRecord claim(@Nullable UUID requested, BlockLocation at, Supplier<UUID> newIds) {
         if (requested != null) {
             NetworkRecord existing = records.get(requested);
             if (existing == null) {
@@ -65,7 +66,7 @@ public final class NetworkDirectory {
      *
      * @return {@code true} se a rede estava mesmo ligada a esse Núcleo
      */
-    public boolean detach(UUID id, CoreLocation at) {
+    public boolean detach(UUID id, BlockLocation at) {
         NetworkRecord record = records.get(id);
         if (record == null || !at.equals(record.core())) {
             return false;
@@ -74,7 +75,31 @@ public final class NetworkDirectory {
         return true;
     }
 
-    private NetworkRecord create(UUID id, CoreLocation at) {
+    /**
+     * Rede cujo Núcleo está mais perto, na mesma dimensão, até {@code maxDistance} blocos. Usado para entrelaçar
+     * sozinho um bloco colocado perto de um Núcleo.
+     *
+     * @param distance distância (em blocos) de um Núcleo até o bloco colocado; quem chama sabe desempacotar a posição
+     */
+    public @Nullable NetworkRecord nearestCore(String dimension, ToDoubleFunction<BlockLocation> distance,
+                                               double maxDistance) {
+        NetworkRecord best = null;
+        double bestDistance = maxDistance;
+        for (NetworkRecord record : records.values()) {
+            BlockLocation core = record.core();
+            if (core == null || !core.dimension().equals(dimension)) {
+                continue;
+            }
+            double d = distance.applyAsDouble(core);
+            if (d <= bestDistance) {
+                best = record;
+                bestDistance = d;
+            }
+        }
+        return best;
+    }
+
+    private NetworkRecord create(UUID id, BlockLocation at) {
         NetworkRecord record = new NetworkRecord(id, new NetworkPower(0), at);
         records.put(id, record);
         return record;

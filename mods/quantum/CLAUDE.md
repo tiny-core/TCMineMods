@@ -7,8 +7,9 @@ Armazenamento e automação **sem cabos**: um Núcleo Quântico obrigatório e b
 completo, telas e modelos: `docs/PLANO.md`. **Ler o plano antes de mudar regras de
 `storage/` ou `grid/`.**
 
-Estado: **fase 1, fatia 1.2** — o Núcleo Quântico (cubo 3×3×3 com blocos de estrutura), as redes gravadas no mundo
-(`QuantumNetworks`), energia FE com espera sem energia, e a aba do criativo. Próximas: 1.3 Entrelaçador, 1.4 Matriz.
+Estado: **fase 1, fatia 1.3** — Núcleo Quântico (cubo 3×3×3), redes gravadas no mundo (`QuantumNetworks`), energia FE
+com espera, **Entrelaçador** e **Matriz de Superposição (Itens)** somando capacidade. Próximas: 1.4 Módulos de Qubits e
+pools de itens/fluidos no mundo, 1.5 Terminal (aba Rede).
 
 ## Regras que não podem ser quebradas
 
@@ -25,12 +26,22 @@ Estado: **fase 1, fatia 1.2** — o Núcleo Quântico (cubo 3×3×3 com blocos d
 - Núcleo: só o **centro** tem block entity; os 26 `CoreStructureBlock` acham o centro pelas propriedades
   ox/oy/oz (`CoreFootprint`). Só o centro derruba item; estrutura nunca tem loot.
 
+- Bloco que entra na rede: block entity herda `block/EntangledBlockEntity` e o bloco implementa `block/EntangledBlock`.
+  A rede (`NetworkMembers`) é a fonte da verdade de capacidade e ligações; o bloco guarda só o id da rede.
+- Partículas e tudo que é visual ficam em `client/` (`@EventBusSubscriber(value = Dist.CLIENT)`); o servidor decide o
+  que mostrar e manda por pacote (`network/`).
+
 ## Pacotes
 
 | Pacote | O quê |
 |---|---|
 | `storage/` | `Amounts` (aritmética saturada), `ResourcePool` (recurso → quantidade, capacidade, mudanças para sync), `QuantityFormat` (1.2k, 3.4M ... 9.2E) |
-| `grid/` | `QuantumNetworks` (`SavedData` com todas as redes) sobre `NetworkDirectory` (regra de qual rede um Núcleo assume), `NetworkRecord`, `NetworkPower` (energia e espera), `CoreLocation`; `TickBudget`, `Backoff` |
+| `grid/` | `QuantumNetworks` (`SavedData` com todas as redes) sobre `NetworkDirectory` (qual rede um Núcleo assume, Núcleo mais próximo), `NetworkRecord`, `NetworkPower` (energia e espera), `NetworkMembers`/`NetworkMember`/`MemberKind` (blocos entrelaçados), `BlockLocation`; `TickBudget`, `Backoff` |
+| `block/` | `EntangledBlock` + `EntangledBlockEntity`: base de todo bloco que entra numa rede |
+| `block/matrix/` | `SuperpositionMatrixBlock` (1×2) e o block entity |
+| `item/` | `EntanglerItem` |
+| `network/` | `ModNetwork`, `EntanglementLinesPayload`, `EntanglementBroadcaster` (manda as ligações 1×/s) |
+| `client/` | `ClientPayloadHandler`, `EntanglementLines` (partículas) |
 | `block/core/` | `QuantumCoreBlock` (centro), `CoreStructureBlock` (os 26 em volta), `QuantumCoreBlockEntity`, `CoreEnergyStorage` (FE), `QuantumCoreItem` (coloca com o clicado como base), `CoreFootprint` (geometria) |
 | `registry/` | Blocos, itens, block entities, componentes de item, aba do criativo, capabilities |
 

@@ -19,7 +19,11 @@ public final class ModCreativeTabs {
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.tcquantum"))
                     .icon(() -> new ItemStack(ModItems.QUANTUM_CORE.get()))
-                    .displayItems((params, output) -> output.accept(ModItems.QUANTUM_CORE.get()))
+                    .displayItems((params, output) -> {
+                        output.accept(ModItems.QUANTUM_CORE.get());
+                        output.accept(ModItems.ENTANGLER.get());
+                        output.accept(ModItems.SUPERPOSITION_MATRIX.get());
+                    })
                     .build());
 
     private ModCreativeTabs() {}

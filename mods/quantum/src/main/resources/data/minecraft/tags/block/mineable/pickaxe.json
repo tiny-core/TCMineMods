@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "tcquantum:quantum_core",
-    "tcquantum:core_structure"
+    "tcquantum:core_structure",
+    "tcquantum:superposition_matrix"
   ]
 }

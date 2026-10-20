@@ -37,6 +37,12 @@ parte brilhar, basta usar uma textura cujo nome começa com `glow_`.
 | `item/portable_terminal.json` | Terminal Portátil (item) | — | — | holograma, orbe |
 | `item/quantum_core.json` | Núcleo Quântico (item) | — | — | usa o modelo do bloco reduzido (`display`); ajuste a escala aqui se ficar grande ou pequeno |
 | `block/core_structure.json` | Blocos de estrutura do Núcleo | — | — | vazio de propósito (só a textura das partículas ao quebrar) |
+| `block/superposition_matrix_upper.json` | Metade de cima da Matriz | — | — | vazio de propósito (o modelo inteiro sai da metade de baixo) |
+| `item/superposition_matrix.json` | Matriz (item) | — | — | modelo do bloco reduzido (`display`) |
+
+A **frente** dos modelos de bloco com orientação (Matriz) é o lado **sul** (z = 16) do modelo; o blockstate gira a
+partir daí. O `item/entangler.json` (e o `item/portable_terminal.json`) ainda não tem `display`: no Blockbench, aba
+*Display*, ajuste o tamanho no inventário e na mão.
 
 Chips e painéis (Âncoras, Emissor, Interface em painel) estão modelados **colados na face norte** do próprio bloco
 (z = 0); o blockstate roda para as outras 5 faces. Blocos maiores que 1 usam blocos de estrutura invisíveis com

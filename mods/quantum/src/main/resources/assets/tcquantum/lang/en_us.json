@@ -8,5 +8,19 @@
   "message.tcquantum.core.no_room": "The Quantum Core needs a free 3×3×3 space",
   "message.tcquantum.core.status": "Quantum Core: %s · energy %s / %s FE · uses %s FE/t · network %s",
   "message.tcquantum.core.online": "online",
-  "message.tcquantum.core.standby": "standby (no energy)"
+  "message.tcquantum.core.standby": "standby (no energy)",
+  "block.tcquantum.superposition_matrix": "TC Superposition Matrix (Items)",
+  "item.tcquantum.entangler": "TC Entangler",
+  "message.tcquantum.core.members": "Superposition Matrices: %s · item capacity %s",
+  "message.tcquantum.entangle.tuned": "Entangler tuned to network %s",
+  "message.tcquantum.entangle.linked": "%s joined network %s",
+  "message.tcquantum.entangle.already": "%s is already in network %s",
+  "message.tcquantum.entangle.unlinked": "%s left its network",
+  "message.tcquantum.entangle.not_tuned": "Click a Quantum Core first to tune the Entangler",
+  "message.tcquantum.entangle.missing": "That network no longer exists",
+  "message.tcquantum.entangle.cleared": "The Entangler forgot its network",
+  "message.tcquantum.entangle.auto": "%s joined network %s (nearby Quantum Core)",
+  "tooltip.tcquantum.entangler.untuned": "Click a Quantum Core to tune it",
+  "tooltip.tcquantum.entangler.tuned": "Network %s",
+  "tooltip.tcquantum.entangler.usage": "Click a block: join · Shift+click: leave · Shift+use in the air: forget"
 }

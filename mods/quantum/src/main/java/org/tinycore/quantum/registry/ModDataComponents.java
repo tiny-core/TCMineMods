@@ -28,6 +28,12 @@ public final class ModDataComponents {
                     .persistent(UUIDUtil.CODEC)
                     .networkSynchronized(UUIDUtil.STREAM_CODEC));
 
+    /** Rede em que o Entrelaçador foi sintonizado (clicando num Núcleo). */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<UUID>> ENTANGLER_NETWORK =
+            COMPONENTS.registerComponentType("entangler_network", builder -> builder
+                    .persistent(UUIDUtil.CODEC)
+                    .networkSynchronized(UUIDUtil.STREAM_CODEC));
+
     private ModDataComponents() {}
 
     public static void register(IEventBus modBus) {

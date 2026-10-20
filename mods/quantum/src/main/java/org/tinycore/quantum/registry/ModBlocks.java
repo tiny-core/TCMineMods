@@ -10,6 +10,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import org.tinycore.quantum.TcQuantum;
 import org.tinycore.quantum.block.core.CoreStructureBlock;
 import org.tinycore.quantum.block.core.QuantumCoreBlock;
+import org.tinycore.quantum.block.matrix.SuperpositionMatrixBlock;
 
 /**
  * Blocos do mod. {@code DeferredRegister} é uma lista de "coisas a registrar" que o NeoForge preenche no momento
@@ -41,6 +42,17 @@ public final class ModBlocks {
                     .noOcclusion()
                     .noLootTable()
                     .pushReaction(PushReaction.BLOCK)));
+
+    /** Matriz de Superposição (Itens), 1×2. Pistão não move (separaria as metades). */
+    public static final DeferredBlock<SuperpositionMatrixBlock> SUPERPOSITION_MATRIX = BLOCKS.register(
+            "superposition_matrix",
+            () -> new SuperpositionMatrixBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.METAL)
+                    .strength(3.5f, 12f)
+                    .sound(SoundType.METAL)
+                    .noOcclusion()
+                    .pushReaction(PushReaction.BLOCK)
+                    .lightLevel(state -> 6)));
 
     private ModBlocks() {}
 

@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -16,7 +17,9 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.tinycore.quantum.Config;
-import org.tinycore.quantum.grid.CoreLocation;
+import org.tinycore.quantum.grid.BlockLocation;
+import org.tinycore.quantum.grid.MemberKind;
+import org.tinycore.quantum.grid.NetworkMembers;
 import org.tinycore.quantum.grid.NetworkPower;
 import org.tinycore.quantum.grid.NetworkRecord;
 import org.tinycore.quantum.grid.QuantumNetworks;
@@ -59,6 +62,20 @@ public class QuantumCoreBlockEntity extends BlockEntity {
         return Config.CORE_ENERGY_CAPACITY.get();
     }
 
+    /**
+     * Block entity do Núcleo a partir de qualquer um dos 27 blocos do cubo (o Entrelaçador clica em qualquer parte).
+     */
+    public static @Nullable QuantumCoreBlockEntity at(Level level, BlockPos pos, BlockState state) {
+        BlockPos center = state.getBlock() instanceof CoreStructureBlock ? CoreStructureBlock.centerOf(pos, state) : pos;
+        return level.getBlockEntity(center) instanceof QuantumCoreBlockEntity core ? core : null;
+    }
+
+    /** Id da rede deste Núcleo (liga à rede se ainda não ligou). {@code null} no cliente. */
+    public @Nullable UUID boundNetworkId() {
+        NetworkRecord record = network();
+        return record == null ? null : record.id();
+    }
+
     // ---------------------------------------------------------------- rede
 
     /** Rede deste Núcleo, ligando na primeira chamada. {@code null} no cliente. */
@@ -96,8 +113,8 @@ public class QuantumCoreBlockEntity extends BlockEntity {
         network = null;
     }
 
-    private CoreLocation location(ServerLevel server) {
-        return new CoreLocation(server.dimension().location().toString(), worldPosition.asLong());
+    private BlockLocation location(ServerLevel server) {
+        return new BlockLocation(server.dimension().location().toString(), worldPosition.asLong());
     }
 
     /** A energia da rede mudou: o arquivo das redes precisa ser gravado no próximo save. */
@@ -138,12 +155,16 @@ public class QuantumCoreBlockEntity extends BlockEntity {
         Component state = power.online()
                 ? Component.translatable("message.tcquantum.core.online").withStyle(ChatFormatting.AQUA)
                 : Component.translatable("message.tcquantum.core.standby").withStyle(ChatFormatting.GOLD);
+        NetworkMembers members = record.members();
         player.displayClientMessage(Component.translatable("message.tcquantum.core.status",
                 state,
                 QuantityFormat.compact(power.stored()),
                 QuantityFormat.compact(energyCapacity()),
                 QuantityFormat.compact(Config.CORE_ENERGY_PER_TICK.get()),
                 shortId(record.id())), false);
+        player.displayClientMessage(Component.translatable("message.tcquantum.core.members",
+                members.count(MemberKind.ITEM_MATRIX),
+                QuantityFormat.compact(members.capacity(MemberKind.ITEM_MATRIX))), false);
     }
 
     /** Primeiros 8 caracteres do id: o bastante para o jogador diferenciar as redes. */
