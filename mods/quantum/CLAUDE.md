@@ -9,8 +9,8 @@ completo, telas e modelos: `docs/PLANO.md`. **Ler o plano antes de mudar regras 
 
 Estado: **fase 1, fatia 1.4** — Núcleo Quântico (cubo 3×3×3), redes gravadas no mundo (`QuantumNetworks`), energia FE
 com espera, Entrelaçador, Matriz de Superposição (Itens) com **Módulos de Qubits I–V**, e o **conteúdo da rede**
-(pools de itens e fluidos) gravado no mundo, e os **efeitos** (V1) do Núcleo e da Matriz. Próximas: texturas
-(remapear UV e rever as escuras), 1.5 Terminal (aba Rede).
+(pools de itens e fluidos) gravado no mundo, e os **efeitos** (V1) do Núcleo e da Matriz. Texturas remapeadas
+(UV por posição, materiais emendáveis). Próxima: 1.5 Terminal (aba Rede).
 
 ## Regras que não podem ser quebradas
 
@@ -59,7 +59,9 @@ com espera, Entrelaçador, Matriz de Superposição (Itens) com **Módulos de Qu
 
 Em `src/main/resources/assets/tcquantum/` (`models/block`, `models/item`, `textures/block`), exportados do protótipo
 e ajustados pelo autor no Blockbench: **não regerar nem reescrever** esses arquivos sem pedido dele. Mapa arquivo →
-bloco, bloco principal dos multiblocos e peças do BlockEntityRenderer: `docs/MODELOS.md`.
+bloco, bloco principal dos multiblocos e peças do BlockEntityRenderer: `docs/MODELOS.md`. UV por posição no espaço
+(`tools/textures/remap_uv.py`, só mexe nos `"uv"`) e texturas de material emendáveis
+(`tools/textures/quantum_textures.py`); textura nova de material = sem borda, para emendar.
 
 ## Comandos (na raiz do workspace)
 

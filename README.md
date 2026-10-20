@@ -33,7 +33,7 @@ TCMineMods/
 ├── dev/                  # execução com todos os mods juntos (:dev:runClient); não é um mod
 ├── libs/                 # jars do ATM10 para compilar e testar (fora do git; ver libs/LEIA-ME.md)
 ├── docs/DECISOES.md      # decisões do workspace (build, core)
-├── tools/                # scripts auxiliares (ícones das telas)
+├── tools/                # scripts auxiliares (ícones das telas; texturas e UV do TC Quantum)
 ├── gradle.properties     # versões comuns (Minecraft, NeoForge, AE2) e licença
 └── CHANGELOG.md
 ```

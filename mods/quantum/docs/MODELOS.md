@@ -54,7 +54,17 @@ Chips e painéis (Âncoras, Emissor, Interface em painel) estão modelados **col
 colisão (plano, §6.1); um modelo de bloco só pode ir de −16 a 32 px em cada eixo, por isso o "bloco principal" é o
 indicado acima.
 
-## Texturas
+## Texturas e UV
+
+**UV por posição no espaço:** cada face pega a textura no lugar onde está no modelo (escala 1:1), em vez de sempre o
+canto (0, 0). Peças vizinhas continuam o desenho umas das outras e peças finas não mostram só a borda. Quem faz isso
+é `tools/textures/remap_uv.py`; depois de criar peças novas no Blockbench, rode-o de novo (só mexe nos números de
+`"uv"`; geometria e formatação ficam iguais). `vent`, `keys` e `monitor_*` têm desenho próprio e não são remapeadas.
+
+**Texturas de material** (`metal`, `frame`, `dark`, `panel`, `trim`, todas as `glow_*`, `glass_*` e `flat_*`): sem
+borda e emendáveis, geradas por `tools/textures/quantum_textures.py` (cores na tabela `MATERIALS` do script). As
+luzes são de cor uniforme, para peças pequenas mostrarem a cor da luz e não uma moldura.
+
 
 Itens em `textures/item/`: `qubit_module_1` … `qubit_module_5` (chip com qubit roxo e um ponto por nível, na cor do
 nível). São provisórias, geradas por script: redesenhe à vontade mantendo o nome.
