@@ -149,7 +149,7 @@ public final class HttpCloudBackend implements CloudBackend {
     }
 
     /**
-     * {@code POST /channels} (contrato em {@code docs/planos/tc-cloud-storage-tcmine.md}, §canais). TCMine sem o
+     * {@code POST /channels} (contrato em {@code mods/cloud-storage/docs/PLANO-TCMINE.md}, §canais). TCMine sem o
      * endpoint responde 404/405: vira {@code UNSUPPORTED}, não erro.
      */
     @Override

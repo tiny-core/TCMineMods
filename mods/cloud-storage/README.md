@@ -5,7 +5,7 @@ guarda itens num canal dele e os reencontra em outro servidor do **mesmo dono** 
 mundo). Itens de mods que o servidor novo não tem aparecem como incompatíveis e não podem ser retirados.
 
 **Estado: em desenvolvimento (fase 4 de 6).** Fala com a nuvem do TCMine; também funciona com uma "nuvem" de
-teste (arquivo local). Plano e fases: `docs/planos/tc-cloud-storage.md` na raiz do workspace.
+teste (arquivo local). Plano e fases: `docs/PLANO.md`.
 
 ## Com o TCMine
 1. No painel do TCMine, em **Nuvem de itens**, crie uma nuvem e ligue a ela os servidores que devem

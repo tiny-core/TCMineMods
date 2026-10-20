@@ -4,7 +4,7 @@ Armazenamento e automação **sem cabos** para NeoForge 1.21.1 (ATM10). Um **Nú
 outros blocos ficam entrelaçados com ele em qualquer ponto da base. Números gigantes (até 9,2 quintilhões por
 recurso), crafts de mesa e de máquinas, e o **Observatório**, que mostra o que a rede consegue fabricar agora.
 
-> Em desenvolvimento — fase 1. Plano, telas e modelos: `docs/planos/tc-quantum.md` (raiz do workspace).
+> Em desenvolvimento — fase 1. Plano, telas e modelos: `docs/PLANO.md`.
 
 ## Modelos
 

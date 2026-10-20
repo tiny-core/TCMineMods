@@ -18,7 +18,7 @@ import org.tinycore.cloud.server.CloudServerEvents;
 
 /**
  * Entrada do <b>TC Cloud Storage</b>: armazenamento de itens fora do mundo, no banco do TCMine, que a rede
- * do AE2 enxerga como um disco. Plano completo em {@code docs/planos/tc-cloud-storage.md} (raiz do workspace).
+ * do AE2 enxerga como um disco. Plano completo em {@code mods/cloud-storage/docs/PLANO.md}.
  *
  * <p>Pacotes:
  * <ul>

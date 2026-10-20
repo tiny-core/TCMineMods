@@ -4,7 +4,7 @@ As regras gerais (autor, idioma, arquitetura, segurança, desempenho, documenta�
 `CLAUDE.md` da raiz do workspace. Aqui, só o que é deste mod.
 
 Armazenamento e automação **sem cabos**: um Núcleo Quântico obrigatório e blocos "entrelaçados" com ele. Plano
-completo, telas e modelos: `docs/planos/tc-quantum.md` (raiz do workspace). **Ler o plano antes de mudar regras de
+completo, telas e modelos: `docs/PLANO.md`. **Ler o plano antes de mudar regras de
 `storage/` ou `grid/`.**
 
 Estado: **fase 1, fatia 1.1** — módulo, config e o domínio puro (pool de recursos, aritmética saturada, orçamento

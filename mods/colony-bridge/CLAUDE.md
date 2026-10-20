@@ -15,7 +15,7 @@ Tablet (`item/ColonyTabletItem`, telas remotas via `menu/access/`), Chunk Loader
 Pattern Encoder (`block/encoder/`, `logic/encoder/`, padrões só em `integration/ae2/PatternEncoding`).
 Filtro da Ponte e listas do Abastecedor: linhas de item/`#tag`/`@mod` (`logic/target/`, tela em `client/list/`).
 
-Roadmap: `docs/ROADMAP.md` (ler **só** quando a tarefa for sobre planejamento ou feature nova).
+Plano (roadmap): `docs/PLANO.md` (ler **só** quando a tarefa for sobre planejamento ou feature nova).
 Responsabilidade de cada classe: `docs/ARQUITETURA.md`. Guia de modelos: `docs/GUIA-BLOCKBENCH.md`.
 
 ## Comandos (na raiz do workspace)
@@ -26,8 +26,8 @@ Responsabilidade de cada classe: `docs/ARQUITETURA.md`. Guia de modelos: `docs/G
 ./gradlew :colony-bridge:runClient
 ```
 Dependências: a API do AE2 vem do Maven Central; MineColonies, Structurize, BlockUI, Domum Ornamentum,
-AE2 completo, GuideMe e JEI vêm de `mods/colony-bridge/libs/` (jars copiados do ATM10; `-Plibs_dir=...` aponta
-outra pasta). Versões em `mods/colony-bridge/gradle.properties` (AE2) e na raiz (NeoForge) casam com o ATM10.
+AE2 completo, GuideMe e JEI vêm de `libs/` na raiz (jars copiados do ATM10; `-Plibs_dir=...` aponta
+outra pasta). Versões (NeoForge, AE2) no `gradle.properties` da raiz, iguais às do ATM10.
 
 ## Mapa
 

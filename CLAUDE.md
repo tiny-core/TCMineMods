@@ -1,19 +1,23 @@
-# TC Minecraft Mods — instruções gerais para o Claude Code
+# TCMineMods — instruções gerais para o Claude Code
 
 Workspace dos mods **TC** (tiny-core) para **NeoForge 1.21.1** (Java 21), alvo o modpack **ATM10**.
-Autor: Jocian (tiny-core.org). Cada mod tem o próprio `CLAUDE.md` com o que é específico dele; este
-arquivo vale para **todos**.
+Autor: Jocian (tiny-core.org). Repositório `tiny-core/TCMineMods`, licença GPL-3.0 (a mesma do TCMine).
+Cada mod tem o próprio `CLAUDE.md` com o que é específico dele; este arquivo vale para **todos**.
 
 ```
-tc_minecraft_mods/
-├── settings.gradle / build.gradle / gradle.properties   # build multiprojeto e versões comuns
-├── gradle/tc-mod.gradle     # configuração que todo mod TC repete (NeoForge, mods.toml, testes)
+TCMineMods/
+├── settings.gradle / build.gradle / gradle.properties   # build multiprojeto; versões comuns (MC, NeoForge, AE2)
+├── build-logic/             # plugin "tc.mod": o que todo mod repete (NeoForge, TC Core, runs, testes, mods.toml)
+├── libs/                    # jars do ATM10 para compilar/testar (fora do git)
 ├── mods/
 │   ├── core/                # TC Core (tccore): biblioteca comum — mod separado em jogo
 │   ├── colony-bridge/       # TC Colony Bridge (tccolonybridge): AE2 ↔ MineColonies
 │   ├── cloud-storage/       # TC Cloud Storage (tccloud): itens na nuvem do TCMine via AE2 (em desenvolvimento)
 │   └── quantum/             # TC Quantum (tcquantum): armazenamento e automação sem cabos (em desenvolvimento)
 ```
+Cada mod: `build.gradle` (`plugins { id 'tc.mod' }`), `gradle.properties`, `README.md` (uso), `CLAUDE.md`,
+`docs/DECISOES.md` e `docs/PLANO.md`. Ids de mod (`tccore`...) e pacotes (`org.tinycore.*`) **nunca mudam**: trocar
+o id faz os blocos sumirem dos mundos existentes.
 Planejado: mod de reatores do Mekanism, no mesmo estilo (ver README.md, "Criar um mod novo").
 
 ---
@@ -102,13 +106,14 @@ em código genérico (ex.: `CraftOrdering` no Colony Bridge).
 - Métodos públicos e trechos não óbvios têm comentário explicando a intenção, não repetindo o código.
 - Explicar conceitos de Java/NeoForge na primeira vez que aparecem no arquivo.
 - Comentários ainda em português europeu: ao editar o arquivo, converter para PT-BR.
+- Formato do código: o `.editorconfig` (o IntelliJ formata ao salvar com ele). Imports explícitos, sem `pacote.*`.
 - Ao criar/alterar uma feature, atualizar o `README.md` do mod (uso) e, se for decisão de arquitetura,
   registrar no `docs/DECISOES.md` do mod (data, decisão, motivo, alternativas descartadas). Decisões do
   workspace (build, core) vão em `docs/DECISOES.md` da raiz.
 
 ## 9. Economia de tokens
 
-- **Não ler:** `build/`, `run/`, `.gradle/`, `libs/*.jar`, `gradle/wrapper/` (em qualquer mod). Já
+- **Não ler:** `build/`, `run/`, `.gradle/`, `libs/*.jar`, `gradle/wrapper/` (em qualquer pasta). Já
   bloqueados em `.claude/settings.json`.
 - Para entender a API de outro mod, procurar a assinatura exata (grep, ou `javap` **só da classe
   necessária** no jar), não ler pacotes inteiros.

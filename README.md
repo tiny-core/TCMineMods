@@ -1,46 +1,74 @@
-# TC Minecraft Mods
+# TCMineMods
 
-Workspace dos mods **TC** (tiny-core) para **NeoForge 1.21.1**, feitos para o modpack **ATM10**.
+Mods **TC** (tiny-core) para **NeoForge 1.21.1** (Java 21), feitos para o modpack **ATM10**. Fazem parte do
+ecossistema [TCMine](https://github.com/tiny-core/TCMine) (painel, launcher e nuvem de itens).
 
-| Pasta | Mod | O que faz |
-|---|---|---|
-| `mods/core/` | **TC Core** (`tccore`) | Biblioteca comum: design system das telas, ghost slots, redstone, estatísticas. Obrigatório em jogo para os outros mods TC. |
-| `mods/colony-bridge/` | **TC Colony Bridge** (`tccolonybridge`) | Liga uma rede ME do AE2 aos pedidos do MineColonies (Ponte, Abastecedor, Monitores). |
-| `mods/cloud-storage/` | **TC Cloud Storage** (`tccloud`) | Itens guardados na nuvem do TCMine e vistos pela rede AE2; reencontrados em outro servidor do mesmo dono. **Em desenvolvimento (fase 1).** |
-| `mods/quantum/` | **TC Quantum** (`tcquantum`) | Armazenamento e automação sem cabos: Núcleo Quântico, blocos entrelaçados, números gigantes e o Observatório de crafts. **Em desenvolvimento (fase 1).** |
+| Mod | Pasta | O que faz | Estado |
+|---|---|---|---|
+| **TC Core** (`tccore`) | `mods/core/` | Biblioteca comum: design system das telas, ghost slots, redstone, estatísticas. Obrigatório em jogo para os outros mods TC. | estável |
+| **TC Colony Bridge** (`tccolonybridge`) | `mods/colony-bridge/` | Liga uma rede ME do AE2 aos pedidos do MineColonies (Ponte, Abastecedor, Monitores, Terminal do Armazém). | em uso |
+| **TC Cloud Storage** (`tccloud`) | `mods/cloud-storage/` | Itens guardados na nuvem do TCMine e vistos pela rede AE2; reencontrados em outro servidor do mesmo dono. | em desenvolvimento |
+| **TC Quantum** (`tcquantum`) | `mods/quantum/` | Armazenamento e automação sem cabos: Núcleo Quântico, blocos entrelaçados, números gigantes e o Observatório de crafts. | em desenvolvimento |
 
 Planejado: mod para gerenciar os reatores do Mekanism, no mesmo estilo.
+
+## Instalar no jogo
+
+Copie para a pasta `mods/` do ATM10 o jar do mod **e** o `tccore-<versão>.jar` (todos em `build/libs/` depois do
+build). Cada mod explica o uso no próprio `README.md`.
+
+## Estrutura
+
+```
+TCMineMods/
+├── build-logic/          # plugin "tc.mod": o que todo mod repete (NeoForge, TC Core, runs, testes, mods.toml)
+├── mods/
+│   └── <mod>/
+│       ├── build.gradle        # plugins { id 'tc.mod' } + dependências próprias
+│       ├── gradle.properties   # mod_id, nome, versão, pacote
+│       ├── README.md           # uso (jogador)
+│       ├── CLAUDE.md           # regras do mod para o Claude Code
+│       ├── docs/               # PLANO.md, DECISOES.md (e outros do mod)
+│       └── src/                # main/java, main/resources, main/templates (mods.toml), test/java
+├── libs/                 # jars do ATM10 para compilar e testar (fora do git; ver libs/LEIA-ME.md)
+├── docs/DECISOES.md      # decisões do workspace (build, core)
+├── tools/                # scripts auxiliares (ícones das telas)
+├── gradle.properties     # versões comuns (Minecraft, NeoForge, AE2) e licença
+└── CHANGELOG.md
+```
 
 ## Build
 
 Precisa só de um JDK 21+ para rodar o Gradle (o Gradle baixa sozinho o JDK 21 do projeto).
 
 ```bash
-./gradlew build                      # compila e testa tudo; jars em build/libs/ (todos juntos)
+./gradlew build                      # compila e testa tudo; jars em build/libs/
 ./gradlew test --rerun               # só os testes (resultado de cada um no terminal)
-./gradlew :colony-bridge:runClient   # Minecraft de desenvolvimento com o mod (e o core)
+./gradlew :quantum:runClient         # Minecraft de desenvolvimento com o mod (o core roda junto)
+./gradlew :quantum:runServer         # servidor de desenvolvimento (-Pserver_port=25566 para uma segunda porta)
 ```
-Para jogar/testar no ATM10: copie de `build/libs/` para a pasta `mods/` **do ATM10** o jar do mod **e** o `tccore-<versão>.jar`.
-Cada mod tem o seu README (uso) e `libs/` (jars do ATM10 que ele precisa para compilar, fora do git).
 
-## VS Code
+O Colony Bridge só compila com os jars do MineColonies em `libs/` (ver `libs/LEIA-ME.md`).
 
-Abra **esta pasta** (a raiz) e aceite as extensões recomendadas (Java Extension Pack e Gradle).
-- **Tarefas** (Terminal → Executar Tarefa; `Ctrl+Shift+B` = build): build, testes, runClient, runServer, clean
-  e atualizar dependências. Funcionam no Windows e no Linux, inclusive por pasta de rede.
-- **Executar/depurar**: as configurações de cada mod são geradas pelo ModDevGradle quando o VS Code importa o
-  projeto (`.vscode/launch.json`, fora do git). Se não aparecerem: "Java: Clean Java Language Server Workspace".
-- Formato dos arquivos (UTF-8, LF, 4 espaços) vem do `.editorconfig`.
+## IntelliJ IDEA
+
+1. **File → Open** na pasta raiz e confirme o projeto Gradle. A primeira importação baixa o Minecraft e demora.
+2. Execuções: depois da sincronização do Gradle, o ModDevGradle cria as configurações de execução de cada mod
+   (seletor no topo da janela). Também dá pela janela **Gradle** → `<mod>` → `runClient`/`runServer`.
+3. **Formatar ao salvar** (uma vez por máquina): *Settings → Tools → Actions on Save* → marque **Reformat code**
+   (só linhas alteradas: *Changed lines*) e **Optimize imports**. O estilo vem do `.editorconfig` do repositório,
+   então todos formatam igual.
 
 ## Criar um mod novo
 
-1. Pasta nova em `mods/` (ex.: `mods/reactor/`) com:
-   - `build.gradle`: `apply from: rootProject.file('gradle/tc-mod.gradle')` + dependências do mod
-     (`implementation project(':core')` e, nas execuções de dev, `mods { tccore { sourceSet(project(':core').sourceSets.main) } }`
-     — ver `mods/colony-bridge/build.gradle`);
+1. Pasta `mods/<nome>/` (ex.: `mods/reactor/`) com:
+   - `build.gradle`: `plugins { id 'tc.mod' }` e as dependências próprias (o TC Core já vem pelo plugin);
    - `gradle.properties`: `mod_id`, `mod_name` ("TC ..."), `mod_version`, `mod_group_id`, `tccore_version_range`;
-   - `src/main/templates/META-INF/neoforge.mods.toml` com a dependência `tccore`;
-   - `CLAUDE.md` com o que é específico do mod (as regras gerais estão no `CLAUDE.md` da raiz).
-2. O nome `'reactor'` na lista de mods do `settings.gradle` (o projeto fica `:reactor`).
+   - `src/main/templates/META-INF/neoforge.mods.toml` (copie de `mods/quantum/`);
+   - `README.md`, `CLAUDE.md` e `docs/DECISOES.md`.
+2. O nome na lista de mods do `settings.gradle` (o projeto fica `:reactor`).
+3. Uma linha na tabela acima.
 
-Decisões do workspace: `docs/DECISOES.md`.
+## Licença
+
+[GPL-3.0](LICENSE), a mesma do TCMine.

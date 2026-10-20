@@ -2,7 +2,7 @@
 
 > Para copiar no repositório **tiny-core/TCMine** como `docs/CLOUD-STORAGE.md`. A §1 é o trecho a
 > colar no `CLAUDE.md` dele. Mod que consome esta API: `tc-cloud-storage.md` (workspace
-> tc-minecraft-mods). Escrito seguindo as convenções do CLAUDE.md do TCMine: Clean Architecture,
+> TCMineMods). Escrito seguindo as convenções do CLAUDE.md do TCMine: Clean Architecture,
 > GUID v7, tabelas snake_case/colunas PascalCase, enums como string, `Result`, `[LoggerMessage]`,
 > dual provider SQLite/Postgres.
 

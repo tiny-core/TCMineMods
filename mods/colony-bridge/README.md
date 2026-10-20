@@ -248,9 +248,9 @@ podem ser trocadas por datapack/KubeJS. Confira no JEI/EMI do ATM10 (o KubeJS do
 | TC Cartão de Ligação | ` F ` `EME` ` L ` | F Pérola de Fluix · E Engenharia · M Memory Card · L Lógico |
 
 ## Setup
-Este mod faz parte do workspace **TC Minecraft Mods** (ver o `README.md` da raiz: build, VS Code, testes).
-1. Copie para `mods/colony-bridge/libs/` os jars do seu ATM10 (ver `libs/LEIA-ME.txt`).
-2. `ae2_version` fica em `mods/colony-bridge/gradle.properties`; a versão do NeoForge, no `gradle.properties` da raiz.
+Este mod faz parte do workspace **TCMineMods** (ver o `README.md` da raiz: build, IntelliJ, testes).
+1. Copie para `libs/` (na raiz) os jars do seu ATM10 (ver `libs/LEIA-ME.md`).
+2. As versões (NeoForge, AE2) ficam no `gradle.properties` da raiz.
 3. Na raiz: `./gradlew :colony-bridge:build` → `build/libs/tccolonybridge-<versão>.jar`.
 4. **Em jogo, instale também o TC Core** (`build/libs/tccore-<versão>.jar`): o Colony Bridge depende dele.
 5. `./gradlew :colony-bridge:runClient` para testar em dev (o core roda junto).

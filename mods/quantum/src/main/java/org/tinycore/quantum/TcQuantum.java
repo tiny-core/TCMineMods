@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 
 /**
  * Entrada do <b>TC Quantum</b>: armazenamento e automação sem cabos. Tudo gira em torno de um Núcleo
- * Quântico; os outros blocos ficam "entrelaçados" com ele. Plano completo em {@code docs/planos/tc-quantum.md}
+ * Quântico; os outros blocos ficam "entrelaçados" com ele. Plano completo em {@code mods/quantum/docs/PLANO.md}
  * (raiz do workspace).
  *
  * <p>Pacotes (crescem fatia a fatia, ver o {@code CLAUDE.md} do mod):

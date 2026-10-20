@@ -1,7 +1,7 @@
 # Registro de decisões — TC Quantum
 
 Decisões de arquitetura deste mod. As do workspace ficam no `docs/DECISOES.md` da raiz; o desenho completo
-(telas, modelos, fases) está em `docs/planos/tc-quantum.md`.
+(telas, modelos, fases) está em `docs/PLANO.md`.
 
 | Data | Decisão | Motivo | Alternativas descartadas |
 |---|---|---|---|

@@ -4,8 +4,8 @@ As regras gerais (autor, idioma, arquitetura, segurança, desempenho, documenta�
 `CLAUDE.md` da raiz do workspace. Aqui, só o que é deste mod.
 
 Armazena itens do jogador **fora do mundo**, no banco do TCMine (repositório `tiny-core/TCMine`), e
-expõe isso à rede do AE2. Plano completo: `docs/planos/tc-cloud-storage.md` (raiz do workspace); lado
-do TCMine: `docs/planos/tc-cloud-storage-tcmine.md`. **Ler o plano antes de mudar qualquer regra de
+expõe isso à rede do AE2. Plano completo: `docs/PLANO.md`; lado
+do TCMine: `docs/PLANO-TCMINE.md`. **Ler o plano antes de mudar qualquer regra de
 `cloud/`.**
 
 Estado: **fase 4** — fala com o TCMine de verdade (`HttpCloudBackend`, API `/api/cloud/v1`); sem o TCMine,
@@ -14,7 +14,7 @@ a **nuvem local** (`LocalCloudBackend`, arquivo deste computador com trava de um
 cada Link escolhe o seu; criar/renomear pela tela (`PlayerChannels`; no TCMine depende dos endpoints de canal).
 
 Dev: `./gradlew :cloud-storage:runClient -Plibs_dir=<pasta com o jar do AE2 e do GuideMe>` (padrão:
-`mods/colony-bridge/libs`). A nuvem local já vem ligada (`run/tccloud-local.json`).
+`libs/` da raiz). A nuvem local já vem ligada (`run/tccloud-local.json`).
 
 ## Regras que não podem ser quebradas
 
