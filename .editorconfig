@@ -1,15 +1,45 @@
-# Formato dos arquivos, igual em qualquer editor/sistema (https://editorconfig.org).
+# Formato dos arquivos, igual em qualquer editor e sistema (https://editorconfig.org).
+# O IntelliJ lê este arquivo, inclusive as chaves ij_* (estilo do Java): é ele que manda no "Reformat Code" e
+# no "formatar ao salvar". As regras descrevem o estilo que o código já usa, para a formatação não reescrever
+# arquivos inteiros.
 root = true
 
 [*]
 charset = utf-8
 end_of_line = lf
 insert_final_newline = true
+trim_trailing_whitespace = true
 indent_style = space
 indent_size = 4
 
-[*.{json,gradle,toml}]
+# Markdown: dois espaços no fim da linha são quebra de linha; não apagar.
+[*.md]
+trim_trailing_whitespace = false
+
+[*.{json,mcmeta,yml,yaml}]
 indent_size = 2
 
 [*.bat]
 end_of_line = crlf
+
+[*.java]
+max_line_length = 120
+ij_continuation_indent_size = 8
+# Nunca trocar imports por "pacote.*" (o padrão do IntelliJ junta a partir de 5 imports do mesmo pacote).
+ij_java_class_count_to_use_import_on_demand = 999
+ij_java_names_count_to_use_import_on_demand = 999
+# Ordem dos imports: bibliotecas (net.minecraft, org...), linha em branco, javax/java, linha em branco, estáticos.
+ij_java_imports_layout = *, |, javax.**, java.**, |, $*
+# Não quebrar linhas longas sozinho nem juntar linhas que o autor separou.
+ij_java_wrap_long_lines = false
+ij_java_keep_line_breaks = true
+ij_java_keep_simple_methods_in_one_line = true
+ij_java_keep_simple_lambdas_in_one_line = true
+ij_java_keep_simple_classes_in_one_line = true
+ij_java_keep_blank_lines_in_code = 2
+ij_java_keep_blank_lines_in_declarations = 2
+ij_java_keep_blank_lines_before_right_brace = 1
+# Javadoc fica como foi escrito (o formatador reorganizaria parágrafos e listas).
+ij_java_doc_enable_formatting = false
+# Trecho que não deve ser formatado: // @formatter:off ... // @formatter:on
+ij_formatter_tags_enabled = true

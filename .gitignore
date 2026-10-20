@@ -1,10 +1,11 @@
 ### Gradle ###
-.gradle
+.gradle/
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/**/build/
 
 ### IntelliJ IDEA ###
+# Configuração do IDE é de cada máquina; o estilo do código fica no .editorconfig (versionado).
 .idea/
 *.iws
 *.iml
@@ -12,40 +13,17 @@ build/
 out/
 !**/src/**/out/
 
-.run/
-
-### Eclipse ###
-.apt_generated
-.classpath
-.eclipse/
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/**/bin/
-
-### VS Code ###
-# Tarefas, extensões e configurações são compartilhadas; o launch.json é gerado pelo ModDevGradle
-# com caminhos da máquina de quem importou, então fica fora do git.
-.vscode/*
-!.vscode/tasks.json
-!.vscode/extensions.json
-!.vscode/settings.json
-
-### Mac OS ###
+### Sistema ###
 .DS_Store
+Thumbs.db
 
-### Minecraft Modding ###
+### Minecraft / NeoForge ###
+# Mundo, configs e logs do runClient/runServer.
 run/
 !**/src/**/run/
-**/src/generated/**/.cache/
-repo/
-!**/src/**/repo/
-# jars de dependências locais (ATM10), em qualquer mod
-**/libs/*.jar
-
-dist
-# logs de execução (runClient/runServer)
 logs/
+**/src/generated/**/.cache/
+
+# Jars do ATM10 usados para compilar e testar (ver libs/LEIA-ME.md); nunca vão para o git.
+libs/*.jar
+**/libs/*.jar

@@ -1,9 +1,9 @@
-# Disable autocrlf on generated files, they always generate with LF
-# Add any extra files or paths here to make git stop saying they
-# are changed when only line endings change.
-src/generated/**/.cache/* text eol=lf
-src/generated/**/*.json text eol=lf
+# Fim de linha LF no repositório para todos os arquivos de texto (o .editorconfig faz o mesmo no editor).
+* text=auto eol=lf
 
-# Scripts do Gradle: o do Linux/Mac precisa de LF (com CRLF o bash falha); o do Windows, de CRLF.
-gradlew text eol=lf
+# Scripts do Windows precisam de CRLF.
 *.bat text eol=crlf
+
+# Binários: nunca converter.
+*.png binary
+*.jar binary
