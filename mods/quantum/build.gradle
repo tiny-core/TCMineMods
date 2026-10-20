@@ -1,4 +1,45 @@
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
 // TC Quantum. Configuração comum (NeoForge, TC Core, runs, testes) no plugin "tc.mod" (build-logic/).
 plugins {
     id 'tc.mod'
+}
+
+// Brilho dos modelos no escuro: toda parte de um modelo que usa uma textura "glow_*" ganha
+// "neoforge_data": {"block_light": 15, "sky_light": 15} (extensão do NeoForge para luz própria por elemento).
+// É feito na cópia que vai para o jar, não nos arquivos do repositório, porque o Blockbench apaga esse campo a cada
+// vez que salva: assim o modelo pode ser editado à vontade e o brilho nunca se perde (ver docs/MODELOS.md).
+tasks.named('processResources', ProcessResources) {
+    def models = new File(destinationDir, 'assets/tcquantum/models')
+    doLast {
+        if (!models.isDirectory()) {
+            return
+        }
+        models.eachFileRecurse(groovy.io.FileType.FILES) { file ->
+            if (!file.name.endsWith('.json')) {
+                return
+            }
+            def model = new JsonSlurper().parse(file, 'UTF-8')
+            def textures = model.textures ?: [:]
+            boolean changed = false
+            (model.elements ?: []).each { element ->
+                if (element.neoforge_data) {
+                    return
+                }
+                boolean glows = (element.faces ?: [:]).values().any { face ->
+                    String ref = face.texture ?: ''
+                    String name = ref.startsWith('#') ? (textures[ref.substring(1)] ?: '') : ref
+                    name.contains('/glow_')
+                }
+                if (glows) {
+                    element.neoforge_data = [block_light: 15, sky_light: 15]
+                    changed = true
+                }
+            }
+            if (changed) {
+                file.setText(JsonOutput.toJson(model), 'UTF-8')
+            }
+        }
+    }
 }

@@ -10,7 +10,9 @@ arquivos**.
 Cada modelo traz só as peças **paradas**. As peças que se mexem (esfera e anéis do Núcleo, partículas, coluna de
 energia, feixes, hologramas, o item a flutuar no Regulador...) **não** estão no JSON: são desenhadas pelo
 BlockEntityRenderer de cada bloco, com as mesmas cores, quando o bloco for implementado. As luzes (texturas `glow_*`)
-têm `"neoforge_data": {"block_light": 15}`: brilham no escuro.
+brilham no escuro: no build, toda parte com textura `glow_*` ganha `"neoforge_data": {"block_light": 15, "sky_light": 15}`
+(`build.gradle` do mod). O campo **não** fica nos arquivos daqui porque o Blockbench o apaga ao salvar; para uma
+parte brilhar, basta usar uma textura cujo nome começa com `glow_`.
 
 ## Arquivos
 
