@@ -33,6 +33,8 @@ têm `"neoforge_data": {"block_light": 15}`: brilham no escuro.
 | `block/monitor.json`, `block/network_panel.json` | Monitor, Painel da Rede | 1×1 (Painel: multibloco) | — | o ecrã inteiro da frente |
 | `item/entangler.json` | Entrelaçador (item) | — | — | orbe e par entrelaçado |
 | `item/portable_terminal.json` | Terminal Portátil (item) | — | — | holograma, orbe |
+| `item/quantum_core.json` | Núcleo Quântico (item) | — | — | usa o modelo do bloco reduzido (`display`); ajuste a escala aqui se ficar grande ou pequeno |
+| `block/core_structure.json` | Blocos de estrutura do Núcleo | — | — | vazio de propósito (só a textura das partículas ao quebrar) |
 
 Chips e painéis (Âncoras, Emissor, Interface em painel) estão modelados **colados na face norte** do próprio bloco
 (z = 0); o blockstate roda para as outras 5 faces. Blocos maiores que 1 usam blocos de estrutura invisíveis com

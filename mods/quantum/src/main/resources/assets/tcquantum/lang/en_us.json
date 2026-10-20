@@ -1,0 +1,12 @@
+{
+  "itemGroup.tcquantum": "TC Quantum",
+  "block.tcquantum.quantum_core": "TC Quantum Core",
+  "block.tcquantum.core_structure": "TC Quantum Core",
+  "tooltip.tcquantum.core.size": "Takes 3×3×3 blocks, built on top of the clicked block",
+  "tooltip.tcquantum.core.new_network": "Creates a new network when placed",
+  "tooltip.tcquantum.core.network": "Network %s (its energy and contents come back when placed)",
+  "message.tcquantum.core.no_room": "The Quantum Core needs a free 3×3×3 space",
+  "message.tcquantum.core.status": "Quantum Core: %s · energy %s / %s FE · uses %s FE/t · network %s",
+  "message.tcquantum.core.online": "online",
+  "message.tcquantum.core.standby": "standby (no energy)"
+}

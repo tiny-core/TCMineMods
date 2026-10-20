@@ -1,0 +1,12 @@
+{
+  "itemGroup.tcquantum": "TC Quantum",
+  "block.tcquantum.quantum_core": "TC Núcleo Quântico",
+  "block.tcquantum.core_structure": "TC Núcleo Quântico",
+  "tooltip.tcquantum.core.size": "Ocupa 3×3×3 blocos, montado em cima do bloco clicado",
+  "tooltip.tcquantum.core.new_network": "Cria uma rede nova ao ser colocado",
+  "tooltip.tcquantum.core.network": "Rede %s (energia e conteúdo voltam ao colocar)",
+  "message.tcquantum.core.no_room": "O Núcleo Quântico precisa de um espaço livre de 3×3×3",
+  "message.tcquantum.core.status": "Núcleo Quântico: %s · energia %s / %s FE · consumo %s FE/t · rede %s",
+  "message.tcquantum.core.online": "ligado",
+  "message.tcquantum.core.standby": "em espera (sem energia)"
+}

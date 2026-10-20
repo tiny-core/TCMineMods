@@ -22,6 +22,19 @@ public final class Config {
                     "A espera dobra a cada ciclo vazio (1, 2, 4, ...) e volta a 1 quando aparece trabalho.")
             .defineInRange("idleBackoffMaxTicks", 40, 1, 400);
 
+    public static final ModConfigSpec.LongValue CORE_ENERGY_CAPACITY = B
+            .comment("Energia que o Núcleo Quântico guarda sozinho, em FE (as Baterias somam a isto quando existirem).")
+            .defineInRange("coreEnergyCapacity", 1_000_000L, 1_000L, Long.MAX_VALUE);
+
+    public static final ModConfigSpec.IntValue CORE_ENERGY_PER_TICK = B
+            .comment("Consumo base da rede, em FE por tick, enquanto o Núcleo está carregado. 0 = rede sem consumo.")
+            .defineInRange("coreEnergyPerTick", 16, 0, 1_000_000);
+
+    public static final ModConfigSpec.IntValue STANDBY_RESUME_TICKS = B
+            .comment("Sem energia, a rede entra em espera e só volta com energia guardada para este número de ticks",
+                    "de consumo (100 = 5 segundos). Evita que ela fique ligando e desligando com pouca entrada.")
+            .defineInRange("standbyResumeTicks", 100, 1, 72_000);
+
     public static final ModConfigSpec SPEC = B.build();
 
     private Config() {}

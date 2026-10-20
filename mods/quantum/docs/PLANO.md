@@ -1,6 +1,6 @@
 # Plano — TC Quantum (`tcquantum`)
 
-> Estado: **fase 1 em curso** (fatia 1.1: módulo `mods/quantum/`, config e domínio puro). Telas e modelos fechados na fase 0.
+> Estado: **fase 1 em curso** — 1.1 (módulo, config, domínio puro) e 1.2 (Núcleo Quântico, redes no mundo, energia) feitas. Telas e modelos fechados na fase 0.
 >
 > Revisão 2: tema de física quântica; números gigantes; Links completos (energia, redstone, fluidos,
 > químicos); máquinas detectadas sozinhas (slots, saídas com chance, multiblocos); Bateria; SCC como

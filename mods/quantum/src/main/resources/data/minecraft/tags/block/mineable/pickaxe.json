@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "tcquantum:quantum_core",
+    "tcquantum:core_structure"
+  ]
+}
