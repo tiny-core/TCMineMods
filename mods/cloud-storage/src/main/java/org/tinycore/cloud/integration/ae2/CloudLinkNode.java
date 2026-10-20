@@ -22,8 +22,6 @@ import org.tinycore.cloud.block.LinkNetwork;
 import org.tinycore.cloud.server.CloudService;
 
 import java.util.UUID;
-import java.util.function.IntSupplier;
-import java.util.function.Supplier;
 
 /**
  * A parte AE2 do TC Cloud Link: o nó da grade e o {@code IStorageProvider} que monta o canal na rede. É a
