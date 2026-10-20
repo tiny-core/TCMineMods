@@ -22,6 +22,8 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -35,6 +37,7 @@ import org.tinycore.quantum.block.EntangledBlock;
 import org.tinycore.quantum.block.core.QuantumCoreBlockEntity;
 import org.tinycore.quantum.grid.NetworkRecord;
 import org.tinycore.quantum.item.QubitModuleItem;
+import org.tinycore.quantum.registry.ModBlockEntities;
 
 /**
  * <b>TC Matriz de Superposição (Itens)</b>: soma capacidade de itens à rede em que estiver entrelaçada. Não guarda
@@ -91,6 +94,16 @@ public class SuperpositionMatrixBlock extends Block implements EntityBlock, Enta
     @Override
     public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return state.getValue(HALF) == DoubleBlockHalf.LOWER ? new SuperpositionMatrixBlockEntity(pos, state) : null;
+    }
+
+    /** Só no servidor: uma vez por segundo, manda ao cliente o estado dos efeitos se mudou. */
+    @Override
+    public <T extends BlockEntity> @Nullable BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state,
+                                                                            @NotNull BlockEntityType<T> type) {
+        if (level.isClientSide || type != ModBlockEntities.SUPERPOSITION_MATRIX.get()) {
+            return null;
+        }
+        return (lvl, pos, st, be) -> ((SuperpositionMatrixBlockEntity) be).serverTick();
     }
 
     // ---------------------------------------------------------------- duas metades

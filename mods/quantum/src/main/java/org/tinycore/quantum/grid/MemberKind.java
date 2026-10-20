@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 public enum MemberKind {
 
     /** Matriz de Superposição de itens: soma capacidade de itens à rede. Laranja (canal de itens). */
-    ITEM_MATRIX(0xF59E0B);
+    ITEM_MATRIX(0xF97316);
 
     private final int color;
 

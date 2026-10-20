@@ -4,7 +4,7 @@ Armazenamento e automação **sem cabos** para NeoForge 1.21.1 (ATM10). Um **Nú
 outros blocos ficam entrelaçados com ele em qualquer ponto da base. Números gigantes (até 9,2 quintilhões por
 recurso), crafts de mesa e de máquinas, e o **Observatório**, que mostra o que a rede consegue fabricar agora.
 
-> Em desenvolvimento — fase 1 (fatia 1.4: Módulos de Qubits e armazenamento salvo no mundo). Plano, telas e modelos: `docs/PLANO.md`.
+> Em desenvolvimento — fase 1 (fatias 1.4 e V1: Módulos de Qubits, armazenamento salvo no mundo, efeitos). Plano, telas e modelos: `docs/PLANO.md`.
 
 ## TC Núcleo Quântico
 
@@ -21,6 +21,8 @@ O coração da rede: sem ele, nada do mod funciona. Ocupa um cubo de **3×3×3**
   (aparece no tooltip): colocado de novo, em qualquer lugar ou dimensão, a energia e o conteúdo voltam. Um Núcleo
   copiado no criativo cria uma rede nova; duas cópias nunca dividem o mesmo conteúdo.
 - Resiste a explosões como obsidiana e não é movido por pistões.
+- **Efeitos:** ligado, a esfera roxa pulsa, os 3 anéis giram e 6 qubits orbitam; em espera, a esfera apaga e os anéis
+  param.
 
 ## TC Entrelaçador
 
@@ -42,6 +44,9 @@ rede, e a capacidade continua a contar com o chunk da Matriz descarregado.
 - **Clique com a mão vazia:** módulos encaixados, capacidade da Matriz e a ocupação da rede.
 - **Clique com um Módulo de Qubits:** encaixa (4 encaixes). **Shift + clique com a mão vazia:** tira o último.
 - **Quebrar:** cai a Matriz e os módulos que estavam nela.
+- **Efeitos:** partículas nas câmaras com módulo (mais quanto mais cheia a rede); LED de cada câmara; medidores de
+  ocupação (10 segmentos de cada lado, 12 na frente; cor laranja até 80%, âmbar até 95%, vermelho acima; cheia, o
+  último pisca) e luz de estado no topo. Rede em espera: tudo apagado. Atualiza 1 vez por segundo.
 
 Capacidade de uma Matriz = `matrixItemCapacity` + a soma dos módulos. Padrões: I = 262k, II = 2M, III = 16M,
 IV = 134M, V = 1G itens por módulo (uma Matriz com 4 módulos V guarda ~4,3 mil milhões de itens).

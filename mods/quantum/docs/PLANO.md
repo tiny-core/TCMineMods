@@ -1,8 +1,8 @@
 # Plano — TC Quantum (`tcquantum`)
 
 > Estado: **fase 1 em curso** — 1.1 (módulo, config, domínio puro), 1.2 (Núcleo Quântico, redes no mundo, energia) e 1.3 (Entrelaçador,
-> Matriz de Itens somando capacidade) e 1.4 (Módulos de Qubits, conteúdo da rede no mundo) feitas; próximas: V1 (efeitos
-> do Núcleo e da Matriz), 1.5 Terminal (aba Rede). Telas e modelos fechados na fase 0.
+> Matriz de Itens somando capacidade) e 1.4 (Módulos de Qubits, conteúdo da rede no mundo) e V1 (efeitos do Núcleo e da
+> Matriz) feitas; próximas: texturas (UV e cores), 1.5 Terminal (aba Rede). Telas e modelos fechados na fase 0.
 >
 > Revisão 2: tema de física quântica; números gigantes; Links completos (energia, redstone, fluidos,
 > químicos); máquinas detectadas sozinhas (slots, saídas com chance, multiblocos); Bateria; SCC como

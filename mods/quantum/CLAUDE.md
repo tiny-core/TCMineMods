@@ -9,7 +9,8 @@ completo, telas e modelos: `docs/PLANO.md`. **Ler o plano antes de mudar regras 
 
 Estado: **fase 1, fatia 1.4** — Núcleo Quântico (cubo 3×3×3), redes gravadas no mundo (`QuantumNetworks`), energia FE
 com espera, Entrelaçador, Matriz de Superposição (Itens) com **Módulos de Qubits I–V**, e o **conteúdo da rede**
-(pools de itens e fluidos) gravado no mundo. Próximas: V1 (efeitos do Núcleo e da Matriz), 1.5 Terminal (aba Rede).
+(pools de itens e fluidos) gravado no mundo, e os **efeitos** (V1) do Núcleo e da Matriz. Próximas: texturas
+(remapear UV e rever as escuras), 1.5 Terminal (aba Rede).
 
 ## Regras que não podem ser quebradas
 
@@ -32,6 +33,10 @@ com espera, Entrelaçador, Matriz de Superposição (Itens) com **Módulos de Qu
   qualquer erro = ilegível, e o registro fica **órfão** em `NetworkStorage`, gravado de volta intacto. Nunca usar o
   `ItemStack.parse` comum (aceita resultado parcial) nem apagar o que não deu para ler.
 - Carregar do disco usa `ResourcePool.restore` (ignora a capacidade); o jogo usa `insert`/`extract`.
+- Efeitos de bloco (`client/render/`): só desenham, nunca decidem. O estado vem do bloco (Núcleo: `ONLINE`) ou do
+  block entity sincronizado pelo servidor só quando muda, no máximo 1×/s (Matriz: `visualOnline`, `visualFill`).
+  As posições dos efeitos da Matriz copiam o modelo do autor: mudou câmara/medidor/LED no Blockbench, atualizar as
+  constantes do `MatrixEffectsRenderer`.
 - Partículas e tudo que é visual ficam em `client/` (`@EventBusSubscriber(value = Dist.CLIENT)`); o servidor decide o
   que mostrar e manda por pacote (`network/`).
 
@@ -42,10 +47,11 @@ com espera, Entrelaçador, Matriz de Superposição (Itens) com **Módulos de Qu
 | `storage/` | `Amounts` (aritmética saturada), `ResourcePool` (recurso → quantidade, capacidade, mudanças para sync), `ItemKey`/`FluidKey` (identidade do recurso, sem quantidade), `QuantityFormat` (1.2k, 3.4M ... 9.2E) |
 | `grid/` | `QuantumNetworks` (`SavedData` com todas as redes) sobre `NetworkDirectory` (qual rede um Núcleo assume, Núcleo mais próximo), `NetworkRecord`, `NetworkPower` (energia e espera), `NetworkMembers`/`NetworkMember`/`MemberKind` (blocos entrelaçados), `NetworkStorage` (pools e órfãos), `BlockLocation`; `TickBudget`, `Backoff` |
 | `block/` | `EntangledBlock` + `EntangledBlockEntity`: base de todo bloco que entra numa rede |
-| `block/matrix/` | `SuperpositionMatrixBlock` (1×2), o block entity, `MatrixModules` (encaixes e capacidade), `MatrixInteractions` (cliques e mensagens) |
+| `block/matrix/` | `SuperpositionMatrixBlock` (1×2), o block entity, `MatrixModules` (encaixes e capacidade), `MatrixInteractions` (cliques e mensagens), `GaugeLevels` (regras dos medidores) |
 | `item/` | `EntanglerItem`, `QubitModuleItem` |
 | `network/` | `ModNetwork`, `EntanglementLinesPayload`, `EntanglementBroadcaster` (manda as ligações 1×/s) |
-| `client/` | `ClientPayloadHandler`, `EntanglementLines` (partículas) |
+| `client/` | `ClientSetup` (registra os renderizadores), `ClientPayloadHandler`, `EntanglementLines` (partículas) |
+| `client/render/` | `EffectBoxes` (caixas coloridas com luz máxima), `CoreEffectsRenderer`, `MatrixEffectsRenderer` |
 | `block/core/` | `QuantumCoreBlock` (centro), `CoreStructureBlock` (os 26 em volta), `QuantumCoreBlockEntity`, `CoreEnergyStorage` (FE), `QuantumCoreItem` (coloca com o clicado como base), `CoreFootprint` (geometria) |
 | `registry/` | Blocos, itens, block entities, componentes de item, aba do criativo, capabilities |
 
