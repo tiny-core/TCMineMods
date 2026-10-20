@@ -1,48 +1,13 @@
-// TC Cloud Storage. Configuração comum de mod TC em ../gradle/tc-mod.gradle; aqui só o que é deste mod.
-apply from: rootProject.file('gradle/tc-mod.gradle')
-
-// O TC Core precisa estar configurado antes (usamos o sourceSet dele nas execuções de dev).
-evaluationDependsOn(':core')
-
-// Jars do ATM10 usados só nas execuções de dev (AE2 completo + GuideMe, de que ele depende). Padrão: os mesmos
-// que o Colony Bridge já usa; dá para apontar outra pasta com -Plibs_dir=/caminho.
-var libsDir = project.findProperty('libs_dir') ?: rootProject.file('mods/colony-bridge/libs')
-
-neoForge {
-    runs {
-        client {
-            client()
-        }
-        server {
-            server()
-            programArgument '--nogui'
-            // Porta opcional (-Pserver_port=25570), para quando a 25565 já está em uso na máquina.
-            if (project.findProperty('server_port')) {
-                programArgument '--port'
-                programArgument project.findProperty('server_port').toString()
-            }
-        }
-    }
-
-    mods {
-        // Em dev o core roda junto, como mod separado (igual no ATM10).
-        tccore {
-            sourceSet(project(':core').sourceSets.main)
-        }
-    }
-}
-
-configurations {
-    runtimeClasspath.extendsFrom localRuntime
+// TC Cloud Storage. Configuração comum (NeoForge, TC Core, runs, testes) no plugin "tc.mod" (build-logic/).
+plugins {
+    id 'tc.mod'
 }
 
 dependencies {
-    // TC Core: biblioteca comum dos mods TC (mod separado em jogo).
-    implementation project(':core')
-
-    // AE2: compila contra a API publicada (usada a partir da fase 2: nó da grade e MEStorage).
+    // AE2: compila contra a API publicada; opcional em jogo (integration/Ae2Compat).
     compileOnly "org.appliedenergistics:appliedenergistics2:${ae2_version}:api"
     testImplementation "org.appliedenergistics:appliedenergistics2:${ae2_version}:api"
 
-    localRuntime fileTree(dir: libsDir, include: ['appliedenergistics2-*.jar', 'guideme-*.jar'])
+    // runClient/runServer com o AE2 completo (libs/ da raiz). Testar sem o AE2: -Plibs_dir=<pasta vazia>.
+    localRuntime fileTree(dir: atm10Libs, include: ['appliedenergistics2-*.jar', 'guideme-*.jar'])
 }

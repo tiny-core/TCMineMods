@@ -1,0 +1,3 @@
+// Build separado com o plugin "tc.mod" (o que todo mod TC repete). Entra no build principal por
+// pluginManagement.includeBuild, no settings.gradle da raiz.
+rootProject.name = 'build-logic'

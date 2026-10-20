@@ -1,0 +1,122 @@
+// Plugin "tc.mod": tudo o que um mod TC repete. Cada mod só declara plugins { id 'tc.mod' } e as dependências
+// próprias. Lê do gradle.properties do mod: mod_id, mod_name, mod_version, mod_group_id; e da raiz: versões
+// do Minecraft/NeoForge/AE2 e a licença.
+plugins {
+    id 'java-library'
+    id 'idea'
+    id 'net.neoforged.moddev'
+}
+
+String modId = project.property('mod_id')
+
+project.version = project.property('mod_version')
+project.group = project.property('mod_group_id')
+base.archivesName = modId
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+// Saída do build na raiz, não dentro de cada mod: intermediários em build/<mod>/ e os jars finais de todos os
+// mods juntos em build/libs/ (é de lá que se copia para o ATM10).
+layout.buildDirectory = rootProject.layout.buildDirectory.dir(project.name)
+tasks.named('jar', Jar) {
+    destinationDirectory = rootProject.layout.buildDirectory.dir('libs')
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenCentral() // AE2 API, JUnit
+}
+
+// Jars do ATM10 (MineColonies, AE2 completo, JEI...) para compilar e rodar em dev: pasta libs/ da raiz, ou outra
+// com -Plibs_dir=/caminho. Os mods usam: fileTree(dir: atm10Libs, include: 'minecolonies-*.jar').
+project.ext.atm10Libs = rootProject.file(project.findProperty('libs_dir') ?: 'libs')
+
+// "localRuntime": dependências que só existem no runClient/runServer (não vão para quem depende do mod).
+configurations {
+    localRuntime
+    runtimeClasspath.extendsFrom localRuntime
+}
+
+neoForge {
+    version = project.neo_version
+
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+
+    mods.create(modId) {
+        sourceSet(sourceSets.main)
+    }
+
+    runs {
+        client {
+            client()
+        }
+        server {
+            server()
+            programArgument '--nogui'
+            // Porta própria para rodar dois servidores de dev ao mesmo tempo: -Pserver_port=25566
+            if (project.findProperty('server_port')) {
+                programArgument '--port'
+                programArgument project.findProperty('server_port').toString()
+            }
+        }
+    }
+}
+
+// Todo mod TC (menos o próprio core) depende do TC Core e, em dev, roda com ele como mod separado, igual no ATM10.
+if (project.path != ':core') {
+    evaluationDependsOn(':core')
+    dependencies {
+        implementation project(':core')
+    }
+    neoForge.mods.create('tccore') {
+        sourceSet(project(':core').sourceSets.main)
+    }
+}
+
+// Testes: classes do Minecraft/NeoForge no classpath (NBT, enums, codecs), sem subir o jogo inteiro.
+neoForge.addModdingDependenciesTo(sourceSets.test)
+
+// Testes automáticos (JUnit 5) das partes que não precisam do jogo carregado: ./gradlew test
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.11.3')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test', Test) {
+    useJUnitPlatform()
+    // Mostra cada teste no terminal e, se falhar, o motivo completo.
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+        exceptionFormat 'full'
+    }
+}
+
+// neoforge.mods.toml gerado a partir de src/main/templates, trocando ${...} pelas propriedades abaixo (as que o
+// mod não define são ignoradas).
+def templateKeys = ['minecraft_version', 'minecraft_version_range', 'neo_version', 'loader_version_range',
+                    'mod_id', 'mod_name', 'mod_license', 'mod_version',
+                    'ae2_version', 'tccore_version_range']
+def replaceProperties = templateKeys.findAll { project.hasProperty(it) }
+        .collectEntries { [(it): project.property(it).toString()] }
+def generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from 'src/main/templates'
+    into layout.buildDirectory.dir('generated/sources/modMetadata')
+}
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}

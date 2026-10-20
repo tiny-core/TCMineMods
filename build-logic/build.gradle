@@ -1,0 +1,16 @@
+// Compila os scripts de src/main/groovy como plugins do Gradle: src/main/groovy/tc.mod.gradle vira o plugin
+// "tc.mod", aplicado com plugins { id 'tc.mod' } no build.gradle de cada mod. É o jeito padrão do Gradle de
+// compartilhar configuração entre subprojetos ("convention plugin"); o IntelliJ entende, ao contrário do
+// antigo "apply from".
+plugins {
+    id 'groovy-gradle-plugin'
+}
+
+repositories {
+    gradlePluginPortal()
+}
+
+dependencies {
+    // ModDevGradle (plugin oficial do NeoForge): versão única para todos os mods.
+    implementation 'net.neoforged.moddev:net.neoforged.moddev.gradle.plugin:2.0.147'
+}

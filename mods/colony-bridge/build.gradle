@@ -1,53 +1,27 @@
-// TC Colony Bridge. Configuração comum de mod TC em ../gradle/tc-mod.gradle; aqui só o que é deste mod.
-apply from: rootProject.file('gradle/tc-mod.gradle')
-
-// O TC Core precisa estar configurado antes (usamos o sourceSet dele nas execuções de dev).
-evaluationDependsOn(':core')
-
-// Pasta dos jars do ATM10 (MineColonies, AE2 completo...). Padrão: ./libs; dá para apontar outra
-// com -Plibs_dir=/caminho (ex.: testar sem copiar os jars).
-var libsDir = project.findProperty('libs_dir') ?: 'libs'
+// TC Colony Bridge. Configuração comum (NeoForge, TC Core, runs, testes) no plugin "tc.mod" (build-logic/).
+plugins {
+    id 'tc.mod'
+}
 
 neoForge {
     runs {
-        client {
-            client()
-        }
-        server {
-            server()
-            programArgument '--nogui'
-        }
         configureEach {
+            // Log detalhado dos registros em dev (ajuda a achar bloco/item que não registrou).
             systemProperty 'forge.logging.markers', 'REGISTRIES'
             logLevel = org.slf4j.event.Level.DEBUG
         }
     }
-
-    mods {
-        // Em dev o core roda junto, como mod separado (igual no ATM10).
-        tccore {
-            sourceSet(project(':core').sourceSets.main)
-        }
-    }
-}
-
-configurations {
-    runtimeClasspath.extendsFrom localRuntime
 }
 
 dependencies {
-    // TC Core: biblioteca comum dos mods TC (mod separado em jogo).
-    implementation project(':core')
-
-    // AE2: compila contra a API publicada
+    // AE2: compila contra a API publicada.
     compileOnly "org.appliedenergistics:appliedenergistics2:${ae2_version}:api"
     testImplementation "org.appliedenergistics:appliedenergistics2:${ae2_version}:api"
 
-    // MineColonies (+ Structurize, BlockUI, Domum Ornamentum) e o AE2 completo:
-    // copiados do seu ATM10 para ./libs, assim você compila e testa contra
-    // exatamente as mesmas versões que o modpack usa.
-    compileOnly fileTree(dir: libsDir, include: 'minecolonies-*.jar')
+    // MineColonies (+ Structurize, BlockUI, Domum Ornamentum) e o AE2 completo, copiados do ATM10 para libs/ na
+    // raiz: compila e testa contra as mesmas versões do modpack (ver libs/LEIA-ME.md).
+    compileOnly fileTree(dir: atm10Libs, include: 'minecolonies-*.jar')
     // JEI: opcional em jogo; só usado para arrastar itens para o filtro (client/jei/).
-    compileOnly fileTree(dir: libsDir, include: 'jei-*.jar')
-    localRuntime fileTree(dir: libsDir, include: '*.jar')
+    compileOnly fileTree(dir: atm10Libs, include: 'jei-*.jar')
+    localRuntime fileTree(dir: atm10Libs, include: '*.jar')
 }

@@ -1,4 +1,6 @@
 pluginManagement {
+    // Plugin "tc.mod" (build-logic/): a configuração que todo mod TC repete.
+    includeBuild 'build-logic'
     repositories {
         gradlePluginPortal()
     }
@@ -9,12 +11,10 @@ plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
 }
 
-rootProject.name = 'tc_minecraft_mods'
+rootProject.name = 'TCMineMods'
 
-// Cada mod é um subprojeto que mora em mods/<nome>. O nome do projeto continua curto (':core',
-// ':colony-bridge'), então os comandos não mudam: ./gradlew :colony-bridge:runClient.
-// Para criar um mod novo: pasta mods/<nome> com build.gradle + gradle.properties (ver README.md)
-// e o nome dele na lista abaixo.
+// Cada mod é um subprojeto que mora em mods/<nome>. O nome do projeto é curto (':core', ':colony-bridge'),
+// então os comandos ficam ./gradlew :colony-bridge:runClient. Mod novo: ver README.md, "Criar um mod novo".
 ['core', 'colony-bridge', 'cloud-storage', 'quantum'].each { name ->
     include name
     project(":$name").projectDir = file("mods/$name")

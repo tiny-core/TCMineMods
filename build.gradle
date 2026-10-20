@@ -1,48 +1,6 @@
-// Build raiz do workspace: só o que vale para todos os mods TC. O que cada mod repete (NeoForge,
-// metadados, testes) está em gradle/tc-mod.gradle; o específico de cada mod, no build.gradle dele.
-
-plugins {
-    // Declarado aqui (sem aplicar) para todos os subprojetos usarem a mesma versão do ModDevGradle.
-    id 'net.neoforged.moddev' version '2.0.147' apply false
-}
+// Build raiz: não compila nada. A configuração dos mods está no plugin "tc.mod" (build-logic/) e no build.gradle
+// de cada mod; as versões comuns, no gradle.properties.
 
 tasks.named('wrapper', Wrapper).configure {
     distributionType = Wrapper.DistributionType.BIN
-}
-
-subprojects {
-    apply plugin: 'java-library'
-
-    // Saída do build na raiz, não dentro de cada mod: intermediários em build/<mod>/ e os jars finais
-    // de todos os mods juntos em build/libs/ (é de lá que se copia para o ATM10).
-    layout.buildDirectory = rootProject.layout.buildDirectory.dir(project.name)
-    tasks.named('jar', Jar) {
-        destinationDirectory = rootProject.layout.buildDirectory.dir('libs')
-    }
-
-    java.toolchain.languageVersion = JavaLanguageVersion.of(21)
-
-    repositories {
-        mavenCentral() // AE2 API, JUnit
-    }
-
-    tasks.withType(JavaCompile).configureEach {
-        options.encoding = 'UTF-8'
-    }
-
-    // Testes automáticos (JUnit 5) das partes que não precisam do jogo carregado: ./gradlew test
-    dependencies {
-        testImplementation platform('org.junit:junit-bom:5.11.3')
-        testImplementation 'org.junit.jupiter:junit-jupiter'
-        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    }
-
-    tasks.named('test', Test) {
-        useJUnitPlatform()
-        // Mostra cada teste no terminal e, se falhar, o motivo completo.
-        testLogging {
-            events 'passed', 'skipped', 'failed'
-            exceptionFormat 'full'
-        }
-    }
 }
