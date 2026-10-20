@@ -6,6 +6,11 @@ recurso), crafts de mesa e de máquinas, e o **Observatório**, que mostra o que
 
 > Em desenvolvimento — fase 1. Plano, telas e modelos: `docs/planos/tc-quantum.md` (raiz do workspace).
 
+## Modelos
+
+Os modelos 3D e as texturas estão em `src/main/resources/assets/tcquantum/` e abrem no Blockbench
+("Java Block/Item"). O que cada arquivo é e o que fica animado no jogo: `docs/MODELOS.md`.
+
 ## Instalar
 
 Copie para a pasta `mods/` o `tcquantum-<versão>.jar` **e** o `tccore-<versão>.jar` (ambos em `build/libs/` da

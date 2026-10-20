@@ -149,6 +149,22 @@ aberto, diferenças em lotes para o cliente.
 Pedido → plano → reserva no pool → **Processadores Quânticos** (1 craft paralelo cada). Crafts de mesa
 o próprio Núcleo faz. Falta de ingrediente a meio: o craft fica "aguardando" com motivo visível.
 
+**Escolha da receita pelo rendimento.** Quando um item tem várias receitas, o plano escolhe a que dá **mais do item
+pedido pelo mesmo custo**. Exemplo: 1 tora → 4 tábuas na mesa, 1 tora → 6 tábuas na Serra do Mekanism: o plano usa a
+Serra. Regras:
+
+- **Só receitas disponíveis agora**: máquina ligada por Âncora, com energia e não parada (falha, sem saída). Se a
+  Serra estiver desligada ou cheia, a mesa entra no lugar, sem o jogador fazer nada.
+- **Mesma entrada**: compara a quantidade do item pedido por craft (6 > 4). **Entradas diferentes**: compara o custo
+  em matéria-prima, somado pela árvore do Observatório (§3.2), por unidade do item pedido.
+- **Saídas com chance não contam** no rendimento (o plano só promete o garantido); contam depois, quando chegam.
+- Empate: a receita mais rápida (ops/s medido, §3.5); depois, a que o jogador usou por último.
+- Na tela do Pedido: **"Rendimento (padrão) / Rapidez"** — Rapidez troca a ordem (primeiro o tempo, depois o rendimento),
+  para quando o jogador quer o item já e tem matéria-prima de sobra.
+- Por item, o jogador pode **fixar uma receita** (cadeado na aba Padrões); fixada, o plano não troca.
+- Regra pura em `crafting/plan/RecipeChooser`, com testes JUnit (fases 3 e 4); a disponibilidade vem dos grupos de
+  máquinas (§3.5).
+
 ### 3.4 Âncora de Máquina inteligente (o que o sistema descobre sozinho)
 
 **Ao entrelaçar com uma máquina, a Âncora faz um "reconhecimento":**
@@ -216,6 +232,7 @@ A rede deteta sozinha as máquinas iguais e reparte o trabalho entre elas.
 |---|---|---|
 | — | **TC Núcleo Quântico** | Sem ele nada funciona. Guarda pools, receitas e a fila de crafts. 2 blocos de altura |
 | 1 | **TC Interface Quântica** | Ver, exportar e importar, com filtros e modos automáticos |
+| 1b | **TC Interface (painel)** | A mesma Interface em painel fino colado na face de um baú ou máquina, como a parte do AE2. Mesma tela e funções; age só na face onde está; 4 setas mostram o sentido (laranja = exportar, ciano = importar) |
 | 2 | **TC Terminal** (abas Rede, Fabricação, Observatório, Padrões) | Grade da rede, mesa 3×3, crafts possíveis |
 | 3a | **TC Âncora de Máquina** | Link completo com a máquina (§3.4) |
 | 3b | **TC Âncora de Inventário** | Baú/tanque passa a fazer parte da rede |
@@ -380,6 +397,7 @@ atravessam, colocar exige o espaço livre e partir qualquer parte parte o bloco 
 | Bateria de Vácuo | 1×2 | tubo com coluna de energia; as 5 bobinas são o medidor (cada uma = 20%), anéis vermelhos abaixo de 15% e brancos cheia; arco entre terminais quando cheia |
 | Processador Quântico | 1×2 | criostato com "candelabro" dourado, como os computadores quânticos reais |
 | Interface Quântica | 1×1 | fica 1 bloco: precisa caber entre máquinas, canos e baús |
+| Interface (painel) | painel 14×14×3 px numa face | moldura com cantos reforçados, porta redonda em degraus com janela de vidro e cristal, 4 setas; tudo em JSON |
 | Âncoras | chip 8×8×2 px numa face | **o ícone 3D identifica o tipo**, sem peças a girar |
 
 Formas das Âncoras (também no ícone do item): Máquina = hexágono ciano; Inventário = quadrado com
@@ -406,7 +424,10 @@ de entrelaçamento — de propósito sem cara de portal: base de máquina com pa
 mastro com bobinas, gaiola com orbe roxo e o par entrelaçado, feixe curto de 1 bloco que desvanece, com ondas a subir — nunca vai ao céu, para não parecer um waypoint), **Terminal Portátil** (scanner de mão; recetor com
 orbe roxo na lateral, holograma livre por cima).
 
-Protótipo 3D interativo: artefato "TC Quantum Modelos".
+Protótipo 3D interativo: artefato "TC Quantum Modelos". Os modelos (só as peças paradas) e as texturas foram
+exportados do protótipo para `mods/quantum/src/main/resources/assets/tcquantum/` e passam a ser a fonte: os
+ajustes finos são feitos no Blockbench direto nesses arquivos. Mapa arquivo → bloco e o que fica para o
+BlockEntityRenderer: `mods/quantum/docs/MODELOS.md`.
 
 ## 7. Arquitetura do mod
 
@@ -448,8 +469,8 @@ JEI/EMI, Create, Thermal...
 |---|---|---|
 | 0 | Plano, **protótipo HTML das telas e modelos**, nome final | — |
 | 1 | Núcleo, Entrelaçador, pools Itens+Fluidos, Matrizes + Módulos, Terminal (Rede), segurança | guardar e retirar sem cabos |
-| 2 | Interface, Âncora de Inventário, **Bateria** e energia na rede | baús e canos ligados; rede com energia |
-| 3 | Fabricação, Codificador, crafts de mesa, Processador | autocraft de mesa |
+| 2 | Interface (bloco e painel), Âncora de Inventário, **Bateria** e energia na rede | baús e canos ligados; rede com energia |
+| 3 | Fabricação, Codificador, crafts de mesa, Processador, **escolha da receita pelo rendimento** (`RecipeChooser`) | autocraft de mesa |
 | 4 | **Âncora de Máquina** (reconhecimento, canais itens/fluidos/energia/redstone), **grupos de máquinas iguais e divisão de carga**, adaptadores vanilla e Mekanism, aprendizado de chances | autocraft com máquinas |
 | 5 | **Observatório**, Regulador, Emissor, Portátil, Painel | a vitrine do mod |
 | 6 | Matriz Química, radioativos, canal de químicos nas Âncoras | químicos e resíduo nuclear |

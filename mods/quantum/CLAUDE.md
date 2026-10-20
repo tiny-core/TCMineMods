@@ -28,6 +28,12 @@ de tick, espera com recuo). Nada aparece em jogo ainda além do mod na lista.
 | `storage/` | `Amounts` (aritmética saturada), `ResourcePool` (recurso → quantidade, capacidade, mudanças para sync) |
 | `grid/` | `TickBudget` (tempo por tick da rede), `Backoff` (espera 1, 2, 4... ticks quando ocioso) |
 
+## Modelos e texturas
+
+Em `src/main/resources/assets/tcquantum/` (`models/block`, `models/item`, `textures/block`), exportados do protótipo
+e ajustados pelo autor no Blockbench: **não regerar nem reescrever** esses arquivos sem pedido dele. Mapa arquivo →
+bloco, bloco principal dos multiblocos e peças do BlockEntityRenderer: `docs/MODELOS.md`.
+
 ## Comandos (na raiz do workspace)
 
 ```bash

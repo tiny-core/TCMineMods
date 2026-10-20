@@ -1,0 +1,9 @@
+{
+ "credit": "TC Quantum — mesmo corpo do Monitor do TC Colony Bridge; a frente é desenhada pelo BlockEntityRenderer",
+ "parent": "minecraft:block/orientable",
+ "textures": {
+  "top": "tcquantum:block/monitor_top",
+  "front": "tcquantum:block/monitor_front",
+  "side": "tcquantum:block/monitor_side"
+ }
+}
