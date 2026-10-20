@@ -12,21 +12,21 @@ Armazenamento de itens na nuvem do TCMine, visivel para a rede ME do Applied Ene
 o jogador reencontra os itens em outro servidor do mesmo dono.
 '''
 
-[[dependencies.${mod_id}]]
+[[dependencies."${mod_id}"]]
     modId="neoforge"
     type="required"
     versionRange="[${neo_version},)"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.${mod_id}]]
+[[dependencies."${mod_id}"]]
     modId="minecraft"
     type="required"
     versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.${mod_id}]]
+[[dependencies."${mod_id}"]]
     modId="tccore"
     type="required"
     versionRange="${tccore_version_range}"
@@ -34,7 +34,7 @@ o jogador reencontra os itens em outro servidor do mesmo dono.
     side="BOTH"
 
 # AE2 opcional: com ele, o Cloud Link monta o canal na rede ME; sem ele, funciona só pela tela.
-[[dependencies.${mod_id}]]
+[[dependencies."${mod_id}"]]
     modId="ae2"
     type="optional"
     versionRange="[${ae2_version},20)"

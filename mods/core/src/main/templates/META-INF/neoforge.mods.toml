@@ -12,14 +12,14 @@ Biblioteca comum dos mods TC (tiny-core): interface, ghost slots e estatísticas
 Sozinho não adiciona nada ao jogo; é necessário para os outros mods TC.
 '''
 
-[[dependencies.${mod_id}]]
+[[dependencies."${mod_id}"]]
     modId="neoforge"
     type="required"
     versionRange="[${neo_version},)"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.${mod_id}]]
+[[dependencies."${mod_id}"]]
     modId="minecraft"
     type="required"
     versionRange="${minecraft_version_range}"

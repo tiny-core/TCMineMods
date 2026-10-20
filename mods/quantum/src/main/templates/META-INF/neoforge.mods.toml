@@ -12,21 +12,21 @@ Armazenamento e automacao sem cabos: um Nucleo Quantico, blocos entrelacados por
 numeros gigantes e o Observatorio, que mostra tudo o que a rede consegue fabricar agora.
 '''
 
-[[dependencies.${mod_id}]]
+[[dependencies."${mod_id}"]]
     modId="neoforge"
     type="required"
     versionRange="[${neo_version},)"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.${mod_id}]]
+[[dependencies."${mod_id}"]]
     modId="minecraft"
     type="required"
     versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.${mod_id}]]
+[[dependencies."${mod_id}"]]
     modId="tccore"
     type="required"
     versionRange="${tccore_version_range}"
