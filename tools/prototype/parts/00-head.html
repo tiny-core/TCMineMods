@@ -1,0 +1,164 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>TC Quantum Modelos</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: oficina escura — visor 3D grande, seletor de modelos e ficha técnica ao lado (empilha no telemóvel). Tema único escuro, igual às telas do mod. */
+:root {
+  --bg: #0B0C10;
+  --panel: #15171D;
+  --panel-2: #1B1E26;
+  --line: #2E3340;
+  --fg: #E6E8EC;
+  --muted: #A3A8B3;
+  --accent: #F97316;
+  --cyan: #22B8E8;
+  --display: "Pixelify Sans", ui-monospace, monospace;
+  --body: "IBM Plex Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 1280px; margin: 0 auto; padding-block: 20px 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; gap: 16px; }
+header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; }
+h1 { margin: 0; font-family: var(--display); font-size: clamp(24px, 4vw, 34px); font-weight: 700; letter-spacing: .5px; text-wrap: balance; }
+h1 span { color: var(--cyan); }
+header p { margin: 0; color: var(--muted); max-width: 70ch; }
+.chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+.chip { flex: 0 0 auto; display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--panel); border: 2px solid #000; box-shadow: inset 0 0 0 1px var(--line); color: var(--muted); font: 500 14px var(--body); cursor: pointer; }
+.chip:hover { color: var(--fg); }
+.chip[aria-pressed="true"] { color: var(--fg); background: var(--panel-2); box-shadow: inset 0 -3px 0 var(--accent), inset 0 0 0 1px var(--line); }
+.chip:focus-visible, .ctl:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+.dot { width: 8px; height: 8px; background: currentColor; }
+.main { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 16px; align-items: start; }
+@media (max-width: 900px) { .main { grid-template-columns: minmax(0, 1fr); } }
+.stage { position: relative; background: radial-gradient(ellipse at 50% 40%, #182030 0%, #0B0C10 70%); border: 3px solid #000; box-shadow: inset 0 0 0 2px var(--line); height: min(64vh, 600px); min-height: 340px; }
+#view { width: 100%; height: 100%; display: block; touch-action: none; }
+.hint { position: absolute; left: 12px; bottom: 10px; font: 12px var(--mono); color: var(--muted); pointer-events: none; }
+.controls { display: flex; flex-wrap: wrap; gap: 6px; }
+.ctl { display: flex; align-items: center; gap: 6px; padding: 6px 10px; background: var(--panel); border: 2px solid #000; box-shadow: inset 0 0 0 1px var(--line); color: var(--muted); font: 500 13px var(--body); cursor: pointer; }
+.ctl[aria-pressed="true"] { color: var(--fg); box-shadow: inset 0 0 0 1px var(--cyan); background: var(--panel-2); }
+.group-label { font: 12px var(--mono); color: var(--muted); align-self: center; margin-right: 2px; text-transform: uppercase; letter-spacing: .08em; }
+aside { display: flex; flex-direction: column; gap: 12px; padding: 16px; background: var(--panel-2); border: 3px solid #000; box-shadow: inset 0 0 0 2px var(--line); min-width: 0; }
+aside h2 { margin: 0; font-family: var(--display); font-size: 22px; font-weight: 700; }
+.size { font: 13px var(--mono); color: var(--accent); }
+aside h3 { margin: 6px 0 0; font: 600 12px var(--mono); text-transform: uppercase; letter-spacing: .1em; color: var(--cyan); }
+aside ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+aside li { color: #D1D5DB; }
+aside li b { color: var(--fg); font-weight: 600; }
+.note { padding: 10px 12px; background: var(--panel); border-left: 3px solid var(--accent); font-size: 14px; color: #D1D5DB; }
+@media (prefers-reduced-motion: reduce) { .chip, .ctl { transition: none; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>TC <span>Quantum</span> · modelos 3D</h1>
+    <p>Arraste para girar, dois dedos ou roda do rato para aproximar. As medidas estão em pixels do Minecraft (16 px = 1 bloco), já dentro dos limites de um modelo de bloco.</p>
+  </header>
+
+  <nav class="chips" id="chips" aria-label="Modelos"></nav>
+
+  <div class="main">
+    <div style="display: flex; flex-direction: column; gap: 10px; min-width: 0;">
+      <div class="stage">
+        <canvas id="view" aria-label="Visualização 3D do modelo selecionado"></canvas>
+        <div class="hint" id="hint">1 quadrado do chão = 1 bloco</div>
+      </div>
+      <div class="controls" id="controls"></div>
+    </div>
+    <aside id="info" aria-live="polite"></aside>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function () {
+  const P = 1 / 16; // 1 pixel do Minecraft em unidades de bloco
+  const C = { metal: '#2A2E38', dark: '#16181F', trim: '#F97316', cyan: '#22B8E8', item: '#F97316', fluid: '#60A5FA', chem: '#A3E635', energy: '#FBBF24', red: '#F87171', purple: '#C084FC' };
+  const VIEW = { camera: null }; // preenchido quando a cena existe (para peças que olham para a câmara)
+
+  // ---------- texturas pixel (16x16, filtro nearest) ----------
+  function rng(seed) { let s = seed; return () => (s = (s * 16807) % 2147483647) / 2147483647; }
+  function hex(h, d) { const n = parseInt(h.slice(1), 16); let r = (n >> 16) + d, g = ((n >> 8) & 255) + d, b = (n & 255) + d; r = Math.max(0, Math.min(255, r)); g = Math.max(0, Math.min(255, g)); b = Math.max(0, Math.min(255, b)); return `rgb(${r},${g},${b})`; }
+  function canvasTex(draw, seed) {
+    const c = document.createElement('canvas'); c.width = c.height = 16; const x = c.getContext('2d'); draw(x, rng(seed || 7));
+    const t = new THREE.CanvasTexture(c); t.magFilter = THREE.NearestFilter; t.minFilter = THREE.NearestFilter; t.wrapS = t.wrapT = THREE.RepeatWrapping; return t;
+  }
+  const px = (x, c, X, Y, w = 1, h = 1) => { x.fillStyle = c; x.fillRect(X, Y, w, h); };
+  const TEX = {
+    metal: canvasTex((x, r) => { for (let i = 0; i < 16; i++) for (let j = 0; j < 16; j++) px(x, hex(C.metal, Math.round((r() - .5) * 10)), i, j); px(x, '#3A3F4B', 0, 0, 16, 1); px(x, '#3A3F4B', 0, 0, 1, 16); px(x, '#111318', 0, 15, 16, 1); px(x, '#111318', 15, 0, 1, 16); px(x, '#1E2129', 4, 4, 1, 1); px(x, '#1E2129', 11, 11, 1, 1); }, 3),
+    dark: canvasTex((x, r) => { for (let i = 0; i < 16; i++) for (let j = 0; j < 16; j++) px(x, hex(C.dark, Math.round((r() - .5) * 8)), i, j); px(x, '#22252E', 0, 0, 16, 1); }, 5),
+    trim: canvasTex((x, r) => { for (let i = 0; i < 16; i++) for (let j = 0; j < 16; j++) px(x, hex(C.trim, Math.round((r() - .5) * 26)), i, j); px(x, '#FDBA74', 0, 0, 16, 1); }, 9),
+    grille: canvasTex((x) => { px(x, '#101218', 0, 0, 16, 16); for (let i = 1; i < 16; i += 3) for (let j = 1; j < 16; j += 3) px(x, '#2E3340', i, j, 2, 2); }, 1),
+    screen: canvasTex((x) => { px(x, '#0A1220', 0, 0, 16, 16); for (let i = 1; i < 15; i += 3) for (let j = 2; j < 14; j += 3) px(x, (i * j) % 7 === 0 ? '#F97316' : '#1C4F66', i, j, 2, 2); px(x, '#22B8E8', 0, 0, 16, 1); }, 1),
+    machine: canvasTex((x, r) => { for (let i = 0; i < 16; i++) for (let j = 0; j < 16; j++) px(x, hex('#5B616E', Math.round((r() - .5) * 14)), i, j); px(x, '#3F444F', 0, 0, 16, 2); px(x, '#3F444F', 0, 14, 16, 2); px(x, '#2B2F38', 4, 5, 8, 6); px(x, '#7C8494', 5, 6, 6, 1); }, 11),
+    crate: canvasTex((x, r) => { for (let i = 0; i < 16; i++) for (let j = 0; j < 16; j++) px(x, hex('#7A5530', Math.round((r() - .5) * 18)), i, j); px(x, '#4A321B', 0, 0, 16, 1); px(x, '#4A321B', 0, 7, 16, 1); px(x, '#4A321B', 0, 15, 16, 1); px(x, '#4A321B', 0, 0, 1, 16); px(x, '#4A321B', 15, 0, 1, 16); }, 13),
+    lead: canvasTex((x, r) => { for (let i = 0; i < 16; i++) for (let j = 0; j < 16; j++) px(x, hex('#4B5563', Math.round((r() - .5) * 10)), i, j); for (let k = -16; k < 16; k += 4) { x.fillStyle = '#A3E635'; for (let d = 0; d < 16; d++) x.fillRect(k + d, d, 2, 1); } px(x, '#1F2937', 0, 0, 16, 1); px(x, '#1F2937', 0, 15, 16, 1); }, 17),
+    frame: canvasTex((x, r) => { for (let i = 0; i < 16; i++) for (let j = 0; j < 16; j++) px(x, hex('#3A3F4B', Math.round((r() - .5) * 8)), i, j); px(x, '#555C6B', 0, 0, 16, 1); px(x, '#555C6B', 0, 0, 1, 16); px(x, '#1B1E26', 0, 15, 16, 1); px(x, '#1B1E26', 15, 0, 1, 16); }, 21),
+    panel: canvasTex((x, r) => { for (let i = 0; i < 16; i++) for (let j = 0; j < 16; j++) px(x, hex('#1B1E26', Math.round((r() - .5) * 6)), i, j); px(x, '#111318', 0, 0, 16, 1); px(x, '#111318', 0, 0, 1, 16); px(x, '#2E3340', 0, 15, 16, 1); px(x, '#2E3340', 15, 0, 1, 16); [[2, 2], [13, 2], [2, 13], [13, 13]].forEach(([a, b]) => px(x, '#4B5263', a, b)); px(x, '#15171D', 1, 8, 14, 1); }, 23),
+    keys: canvasTex((x) => { px(x, '#0E1015', 0, 0, 16, 16); for (let i = 1; i < 16; i += 2) for (let j = 1; j < 16; j += 2) px(x, (i + j) % 6 === 0 ? '#F97316' : '#1F6F8F', i, j); }, 1),
+    vent: canvasTex((x) => { px(x, '#111318', 0, 0, 16, 16); for (let j = 1; j < 16; j += 3) { px(x, '#3A3F4B', 1, j, 14, 1); px(x, '#22252E', 1, j + 1, 14, 1); } }, 1),
+    holo: (function () { const c = document.createElement('canvas'); c.width = 32; c.height = 16; const x = c.getContext('2d'); x.fillStyle = 'rgba(34,184,232,0.18)'; x.fillRect(0, 0, 32, 16); x.fillStyle = 'rgba(34,184,232,0.9)'; x.fillRect(0, 0, 32, 1); x.fillRect(0, 15, 32, 1); for (let i = 2; i < 30; i += 3) for (let j = 3; j < 14; j += 3) { x.fillStyle = (i * 7 + j) % 11 === 0 ? 'rgba(249,115,22,0.95)' : 'rgba(125,211,252,0.55)'; x.fillRect(i, j, 2, 2); } x.fillStyle = 'rgba(34,184,232,0.8)'; x.fillRect(2, 1, 10, 1); const t = new THREE.CanvasTexture(c); t.magFilter = t.minFilter = THREE.NearestFilter; t.wrapS = t.wrapT = THREE.RepeatWrapping; return t; })()
+  };
+
+  // ---------- materiais ----------
+  const MATS = {};
+  function lit(name) { return MATS[name] || (MATS[name] = new THREE.MeshLambertMaterial({ map: TEX[name] })); }
+  // Luzes e vidro ficam sempre à frente da peça onde estão coladas (polygonOffset), para não cintilar com ela.
+  function glow(color, opacity) { return new THREE.MeshBasicMaterial({ color, transparent: opacity < 1, opacity: opacity ?? 1, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -2 }); }
+  function glass(color) { return new THREE.MeshLambertMaterial({ color, transparent: true, opacity: .22, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -2 }); }
+  function flat(color) { return new THREE.MeshLambertMaterial({ color }); }
+
+  // Caixa em pixels (x0..x1 etc.), com UV repetido pelo tamanho, como um elemento de modelo JSON.
+  function box(g, x0, y0, z0, x1, y1, z1, mat) {
+    const w = x1 - x0, h = y1 - y0, d = z1 - z0;
+    const geo = new THREE.BoxGeometry(w * P, h * P, d * P);
+    const uv = geo.attributes.uv, dims = [[d, h], [d, h], [w, d], [w, d], [w, h], [w, h]];
+    for (let f = 0; f < 6; f++) for (let k = 0; k < 4; k++) { const i = f * 4 + k; uv.setXY(i, uv.getX(i) * dims[f][0] / 16, uv.getY(i) * dims[f][1] / 16); }
+    const m = new THREE.Mesh(geo, typeof mat === 'string' ? lit(mat) : mat);
+    m.position.set((x0 + w / 2) * P, (y0 + h / 2) * P, (z0 + d / 2) * P);
+    g.add(m); return m;
+  }
+  // Muitas caixas de 1 cor numa chamada só (anéis, esferas de voxel).
+  function voxels(points, size, mat) {
+    const geo = new THREE.BoxGeometry(size * P, size * P, size * P);
+    const im = new THREE.InstancedMesh(geo, mat, points.length), m = new THREE.Matrix4();
+    points.forEach((p, i) => { m.makeTranslation(p[0] * P, p[1] * P, p[2] * P); im.setMatrixAt(i, m); });
+    return im;
+  }
+  function voxelsShaded(points, size, R, cols) { // esfera em tons: cor pela altura + ruído
+    const im = voxels(points, size, new THREE.MeshBasicMaterial({ color: '#ffffff' })), c = new THREE.Color(), r = rng(99);
+    const a = new THREE.Color(cols[0]), b = new THREE.Color(cols[1]), d = new THREE.Color(cols[2]);
+    points.forEach((p, i) => { const k = Math.min(1, Math.max(0, (p[1] + R) / (2 * R) + (r() - .5) * .35)); if (k < .5) c.copy(a).lerp(b, k * 2); else c.copy(b).lerp(d, (k - .5) * 2); im.setColorAt(i, c); });
+    im.instanceColor.needsUpdate = true; return im;
+  }
+  function ringPoints(R, step) { const n = Math.max(8, Math.round(2 * Math.PI * R / step)), out = []; for (let i = 0; i < n; i++) { const a = i / n * Math.PI * 2; out.push([Math.cos(a) * R, 0, Math.sin(a) * R]); } return out; }
+  function spherePoints(R) { const out = []; for (let x = -R; x <= R; x++) for (let y = -R; y <= R; y++) for (let z = -R; z <= R; z++) { const d = Math.sqrt(x * x + y * y + z * z); if (d <= R + .3 && d > R - 1.2) out.push([x, y, z]); } return out; }
+  function halo(color, size) {
+    const c = document.createElement('canvas'); c.width = c.height = 64; const x = c.getContext('2d');
+    const g = x.createRadialGradient(32, 32, 0, 32, 32, 32); g.addColorStop(0, color); g.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = g; x.fillRect(0, 0, 64, 64);
+    const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), blending: THREE.AdditiveBlending, transparent: true, depthWrite: false }));
+    s.scale.set(size, size, 1); return s;
+  }
+
+  // ---------- modelos ----------
+  // Ajudas de forma: arestas verticais chanfradas, octógono aproximado e "domo" em degraus.
+  // Chanfro = duas caixas cruzadas. A segunda é 0,02 px mais baixa em cima e em baixo: faces no mesmo plano cintilam (z-fighting).
+  function cbox(g, x0, y0, z0, x1, y1, z1, mat, c) { c = c || 1; const e = Math.min(.02, (y1 - y0) / 4); return [box(g, x0 + c, y0, z0, x1 - c, y1, z1, mat), box(g, x0, y0 + e, z0 + c, x1, y1 - e, z1 - c, mat)]; }
+  function oct(g, cx, cz, r, y0, y1, mat) { const c = Math.max(1, Math.round(r * .42)); return cbox(g, cx - r, y0, cz - r, cx + r, y1, cz + r, mat, c); }
+  function octRing(g, cx, cz, r, w, y0, y1, mat) {
+    const c = Math.max(1, Math.round(r * .42));
+    box(g, cx - r + c, y0, cz - r, cx + r - c, y1, cz - r + w, mat); box(g, cx - r + c, y0, cz + r - w, cx + r - c, y1, cz + r, mat);
+    box(g, cx - r, y0, cz - r + c, cx - r + w, y1, cz + r - c, mat); box(g, cx + r - w, y0, cz - r + c, cx + r, y1, cz + r - c, mat);
+    [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sz]) => { const d = new THREE.Group(); d.position.set((cx + sx * (r - c / 2)) * P, 0, (cz + sz * (r - c / 2)) * P); d.rotation.y = sx * sz > 0 ? -Math.PI / 4 : Math.PI / 4; g.add(d); const L = c * 1.42 + w; box(d, -L / 2, y0 + .02, -w / 2, L / 2, y1 + .02, w / 2, mat); });
+  }
+  function octa(g, cx, cy, cz, sizes, h, mat) { // cristal em degraus, centrado em (cx,cy,cz)
+    const n = sizes.length, out = [];
+    sizes.forEach((s, i) => { const y = cy - n * h / 2 + i * h; out.push(box(g, cx - s / 2, y, cz - s / 2, cx + s / 2, y + h, cz + s / 2, mat)); });
+    return out;
+  }
+  const MODELS = [];
+
