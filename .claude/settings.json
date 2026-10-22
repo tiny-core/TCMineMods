@@ -5,7 +5,18 @@
       "Read(**/run/**)",
       "Read(**/.gradle/**)",
       "Read(**/libs/**/*.jar)",
-      "Read(./gradle/wrapper/**)"
+      "Read(./gradle/wrapper/**)",
+      "Read(./tools/prototype/pw/**)",
+      "Read(./tools/prototype/tc-quantum-modelos.html)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git am:*)",
+      "Bash(git merge:*)",
+      "Bash(git rebase:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git checkout -- :*)",
+      "Bash(git clean:*)",
+      "Bash(git stash drop:*)"
     ]
   }
 }

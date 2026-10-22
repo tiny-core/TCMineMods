@@ -115,8 +115,18 @@ em código genérico (ex.: `CraftOrdering` no Colony Bridge).
 
 ## 9. Economia de tokens
 
-- **Não ler:** `build/`, `run/`, `.gradle/`, `libs/*.jar`, `gradle/wrapper/` (em qualquer pasta). Já
-  bloqueados em `.claude/settings.json`.
+- **Não ler:** `build/`, `run/`, `.gradle/`, `libs/*.jar`, `gradle/wrapper/` (em qualquer pasta), nem
+  `tools/prototype/pw/` e o HTML gerado do protótipo. Já bloqueados em `.claude/settings.json`.
+- **Delegar o mecânico a subagentes baratos** (`.claude/agents/`, modelo Haiku), passando instruções
+  completas e autocontidas; o agente principal fica com arquitetura, desenho, decisões e código difícil:
+  | Tarefa | Subagente |
+  |---|---|
+  | achar código, "onde/quem usa", leituras amplas | `explorador` |
+  | compilar e testar (`./gradlew ...`), resumir erros | `executor-build` |
+  | protótipo 3D: gerar, renderizar PNG, exportar JSON | `prototipo` |
+  | atualizar README/DECISOES/PLANO/MODELOS a partir de um resumo | `docs` |
+  | revisar o diff contra estas regras antes do commit (Sonnet) | `revisor` |
+  Não delegue o que é mais rápido fazer direto (uma busca, um arquivo pequeno): cada subagente começa do zero.
 - Para entender a API de outro mod, procurar a assinatura exata (grep, ou `javap` **só da classe
   necessária** no jar), não ler pacotes inteiros.
 - Usar `grep`/busca antes de abrir arquivos; abrir só as linhas relevantes de arquivos grandes.
@@ -126,7 +136,21 @@ em código genérico (ex.: `CraftOrdering` no Colony Bridge).
 
 ## 10. Git
 
+- **Nunca commitar, fazer push, `git am`, merge, rebase nem descartar mudanças** (bloqueado em
+  `.claude/settings.json`). O autor revê tudo antes. No fim de cada tarefa: rode o `revisor` (se houve Java)
+  e entregue o resultado de `/commit-msg` — o que mudou, os commits sugeridos (mensagem + `git add` de cada
+  um) e o que testar em jogo. Patches para o autor aplicar: `git diff > arquivo.diff` (aplica com `git apply`).
 - Um repositório para o workspace inteiro. Commits pequenos e temáticos, mensagem em inglês no formato
   `tipo: descrição` (`feat`, `fix`, `refactor`, `docs`, `chore`, `test`); quando o commit é de um mod só,
   prefixe o escopo: `feat(colony-bridge): ...`, `refactor(core): ...`.
 - Nunca commitar jars de `libs/`, `run/` nem `build/`.
+
+## 11. Fluxo de uma tarefa
+
+1. Ler o `CLAUDE.md` do mod e só a parte do `docs/PLANO.md` que a tarefa toca (buscar a seção, não ler tudo).
+2. Tarefa grande ou com decisão de arquitetura: plano curto (arquivos, riscos, alternativas) e esperar o "ok".
+3. Implementar em **fatias finas** que compilam sozinhas; regras puras com teste JUnit.
+4. `executor-build` para compilar/testar; corrigir até passar.
+5. `revisor` no diff; corrigir os itens "Bloqueante".
+6. `docs` para README/DECISOES/PLANO/MODELOS e a linha "Estado" do `CLAUDE.md` do mod.
+7. Fechar com `/commit-msg` (sem commitar) e o que testar em jogo.
