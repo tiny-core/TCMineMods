@@ -391,13 +391,14 @@ atravessam, colocar exige o espaço livre e partir qualquer parte parte o bloco 
 | Bloco | Tamanho | Nota |
 |---|---|---|
 | Núcleo Quântico | 3×3×3 | principal = centro do cubo (modelo de bloco vai de −16 a 32 px) |
-| Terminal | 2×1×2 | estação com mesa inclinada, 2 torres e holograma panorâmico (3 quadros) |
-| Matriz de Superposição | 1×2 | rack com 4 câmaras de vidro, uma por módulo; medidores de ocupação: 10 segmentos em cada lateral, 12 na frente, luz de estado no topo (cor do tipo até 80%, âmbar até 95%, vermelho acima) |
-| Colapsador | 2×2×2 | buraco negro em contenção |
-| Túnel Quântico | 1×2 | transmissor com mastro e feixe curto de 1 bloco (não parece portal nem waypoint) |
-| Bateria de Vácuo | 1×2 | tubo com coluna de energia; as 5 bobinas são o medidor (cada uma = 20%), anéis vermelhos abaixo de 15% e brancos cheia; arco entre terminais quando cheia |
-| Processador Quântico | 1×2 | criostato com "candelabro" dourado, como os computadores quânticos reais |
-| Interface Quântica | 1×1 | fica 1 bloco: precisa caber entre máquinas, canos e baús |
+| Terminal | 3×1×2 | principal = embaixo no meio; estação com mesa inclinada, 2 torres e holograma panorâmico (3 quadros) |
+| Matriz de Superposição | 1×2 | **várias por rede**, com filtros (item/tag/mod) e prioridade; rack com 4 câmaras de vidro, uma por módulo; medidores de ocupação: 10 segmentos em cada lateral, 12 na frente, luz de estado no topo (cor do tipo até 80%, âmbar até 95%, vermelho acima) |
+| Colapsador | 3×3×3 | buraco negro em contenção; principal = centro do cubo |
+| Regulador de Estoque | 3×3×3 | um por base, guarda muitas regras; principal = centro do cubo |
+| Túnel Quântico | 3×3×3 | **um por dimensão, obrigatório em todas** (inclusive a do Núcleo); antena de anéis com o par entrelaçado e orbes das dimensões ligadas; sem braços |
+| Bateria de Vácuo | 3×3×3 | **uma por rede**, capacidade por upgrades; toro de plasma (tokamak): as 16 bobinas são o medidor de carga; vermelhas abaixo de 15% |
+| Processador Quântico | 3×3×3 | **um por rede**, canais de craft por upgrades (teto pelo `TickBudget`); candelabro de computador quântico suspenso por 4 braços curtos |
+| Interface Quântica | 1×1 | porta da rede: importa/exporta itens, fluidos, gás e energia, redstone com filtros, expõe a rede a outros mods (AE2 via `MEStorage`); moldura aberta com cubo de dados; também em painel |
 | Interface (painel) | painel 14×14×3 px numa face | moldura com cantos reforçados, porta redonda em degraus com janela de vidro e cristal, 4 setas; tudo em JSON |
 | Âncoras | chip 8×8×2 px numa face | **o ícone 3D identifica o tipo**, sem peças a girar |
 
@@ -417,10 +418,11 @@ ecrã limpo só com o fluxo (seta + /s), o ícone do item e a quantidade — sem
 **Painel da Rede**: monitores multibloco como no Colony Bridge (1×1 até 8×4); o conteúdo cresce com o tamanho
 (números → gráfico de operações/s → ocupação por tipo). A infraestrutura de monitores vai para o TC Core
 (segundo mod a usá-la).
-Modelos 3D próprios: **Regulador** (base com LEDs de estado, tubo octogonal com marcas, coluna de nível,
-anel laranja do alvo e, no topo, o item regulado a flutuar e girar como um item largado no chão — desenhado
-com o renderizador de itens do jogo), **Colapsador 2×2×2** (buraco negro: esfera negra, anel de fotões virado
-para quem olha, disco de acreção em faixas, 4 pilones de contenção com feixes), **Túnel Quântico** (1×2, transmissor
+Modelos 3D próprios: **Regulador 3×3×3, um por base** (a mesma base de contenção do Núcleo; no centro um
+tesserato — hipercubo 4D projetado — de arestas de luz, que acendem de baixo para cima com o estoque e brilham na
+altura do alvo; o item regulado gira dentro dele, desenhado com o renderizador de itens do jogo; 4 braços flutuantes
+como os do Núcleo), **Colapsador 3×3×3** (buraco negro: esfera negra, anel de fotões virado
+para quem olha, disco de acreção em faixas, 4 pilones de contenção com feixes), **Túnel Quântico** (3×3×3, um por dimensão, transmissor
 de entrelaçamento — de propósito sem cara de portal: base de máquina com painel das duas dimensões,
 mastro com bobinas, gaiola com orbe roxo e o par entrelaçado, feixe curto de 1 bloco que desvanece, com ondas a subir — nunca vai ao céu, para não parecer um waypoint), **Terminal Portátil** (scanner de mão; recetor com
 orbe roxo na lateral, holograma livre por cima).

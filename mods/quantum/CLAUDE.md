@@ -10,7 +10,33 @@ completo, telas e modelos: `docs/PLANO.md`. **Ler o plano antes de mudar regras 
 Estado: **fase 1, fatia 1.4** — Núcleo Quântico (cubo 3×3×3), redes gravadas no mundo (`QuantumNetworks`), energia FE
 com espera, Entrelaçador, Matriz de Superposição (Itens) com **Módulos de Qubits I–V**, e o **conteúdo da rede**
 (pools de itens e fluidos) gravado no mundo, e os **efeitos** (V1) do Núcleo e da Matriz. Texturas remapeadas
-(UV por posição, materiais emendáveis). Próxima: 1.5 Terminal (aba Rede).
+(UV por posição, materiais emendáveis). **Modelos v2** (2026-10-21) no estilo do Núcleo, exportados de
+`tools/prototype/`; os efeitos V1 do Núcleo e da Matriz ainda são do desenho anterior. Próxima: 1.5 Terminal (aba
+Rede) — o patch antigo da 1.5 perdeu-se e precisa ser refeito.
+
+## Decisões de design em vigor (detalhe em `docs/DECISOES.md`)
+
+- Linguagem visual de todos os blocos = a do Núcleo: base baixa de metal, filetes de luz, figura de luz central,
+  braços flutuantes; visual limpo, nada atravessa os braços; "Sem energia" apaga e some com o que é animado;
+  surgimento ao ligar. Estado visual vem do servidor, nunca é decidido no render.
+- **Cor por rede (opção A)**: o dono escolhe a paleta no Núcleo e todos os blocos seguem; padrão **Magenta + Roxo**
+  (6 paletas em `CORE_PALETTES`, `tools/prototype/parts/01-*`). Hoje as cores estão nas texturas `glow_*`; a cor
+  por rede vai precisar de tint (BlockColor) ou de cor no BER. Depende da fatia 1.6 (dono da rede).
+- **Regulador de Estoque 3×3×3, um por base**, com muitas regras; mesma base do Núcleo; tesserato (hipercubo 4D) com
+  o item dentro, arestas acendem com o estoque e brilham na altura do alvo; 4 braços.
+- **Bateria e Processador: um por rede, 3×3×3**, upgrades (teto: `Amounts.MAX` de energia; canais presos ao
+  `TickBudget`). **Túnel: um por dimensão, obrigatório em todas** (inclusive a do Núcleo), 3×3×3, sem braços.
+- **Matriz: várias por rede, 1×2**, com filtros (item/tag/mod) e prioridade (filtradas primeiro).
+- Colapsador 3×3×3; Terminal 3×1×2 (principal embaixo no meio). Blocos 3×3×3 partilham a base de contenção.
+- **Interface** = porta da rede (importa/exporta itens, fluidos, gás, energia; redstone com filtros; expõe a rede; AE2 via
+  `MEStorage` em `integration/ae2`; recusa rede espelhada; uma classe por função). Emissor de Nível mantido.
+- Em aberto: na Matriz, **o módulo define o tipo** (recomendado) ou um bloco por tipo. Perguntar antes de mexer.
+
+## Próximos passos (ordem sugerida)
+
+1. Refazer a fatia 1.5 (Terminal, aba Rede).
+2. BERs novos do Núcleo e da Matriz para os modelos v2 (braços, cristal, coluna, raios; células da Matriz).
+3. Ainda no protótipo: Interface, Painel da Interface, Âncoras, Entrelaçador, Monitor, Painel da Rede, Portátil.
 
 ## Regras que não podem ser quebradas
 
@@ -62,6 +88,8 @@ e ajustados pelo autor no Blockbench: **não regerar nem reescrever** esses arqu
 bloco, bloco principal dos multiblocos e peças do BlockEntityRenderer: `docs/MODELOS.md`. UV por posição no espaço
 (`tools/textures/remap_uv.py`, só mexe nos `"uv"`) e texturas de material emendáveis
 (`tools/textures/quantum_textures.py`); textura nova de material = sem borda, para emendar.
+O protótipo 3D e o exportador dos JSON estão em `tools/prototype/` (README lá): peças paradas → JSON, o que se
+mexe → BlockEntityRenderer. Paleta padrão das luzes: **Magenta + Roxo**.
 
 ## Comandos (na raiz do workspace)
 

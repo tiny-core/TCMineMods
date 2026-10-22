@@ -18,20 +18,20 @@ parte brilhar, basta usar uma textura cujo nome começa com `glow_`.
 
 | Arquivo | Bloco | Tamanho | Bloco principal | Peças animadas (BER) |
 |---|---|---|---|---|
-| `block/quantum_core.json` | Núcleo Quântico | 3×3×3 | o do **centro** (camada do meio) | esfera, anéis, qubits, feixes, orbes e auréola |
-| `block/terminal.json` | Terminal | 2×1×2 | o de **baixo à esquerda** (olhando de frente) | holograma |
-| `block/superposition_matrix.json` | Matriz de Superposição | 1×2 | o de **baixo** | partículas das câmaras, medidores |
-| `block/vacuum_battery.json` | Bateria de Vácuo | 1×2 | o de baixo | coluna de energia, espiral, arco |
-| `block/quantum_processor.json` | Processador Quântico | 1×2 | o de baixo | pulso de frio, qubits |
-| `block/quantum_tunnel.json` | Túnel Quântico | 1×2 | o de baixo | orbe, par entrelaçado, feixe curto |
-| `block/collapser.json` | Colapsador | 2×2×2 | o de **baixo**, no canto (a definir na fatia do bloco) | buraco negro, disco, feixes, partículas |
-| `block/quantum_interface.json` | Interface Quântica (bloco) | 1×1 | — | cristal, anel da face ativa |
-| `block/interface_panel.json` | Interface (painel) | painel na face | — | nenhuma (setas por textura animada) |
+| `block/quantum_core.json` | Núcleo Quântico | 3×3×3 | o do **centro** (camada do meio) | braços flutuantes, cristal de voxels, anéis, coluna de energia, raios (base de contenção partilhada) |
+| `block/terminal.json` | Terminal | 3×1×2 | o de **baixo no meio** | hologramas, feixes, teclas, cubo de dados |
+| `block/superposition_matrix.json` | Matriz de Superposição | 1×2 (várias por rede) | o de **baixo** | células, fantasmas, conteúdo, pulsos, medidores, coroa |
+| `block/vacuum_battery.json` | Bateria de Vácuo | 3×3×3 (uma por rede) | o do **centro** (camada do meio) | plasma do toro, pontos quentes, pulsos do solenoide, braços, raios (as bobinas e o solenoide são fixos) |
+| `block/quantum_processor.json` | Processador Quântico | 3×3×3 (um por rede) | o do **centro** (camada do meio) | candelabro, cabos, chip, qubits, pulsos de frio, 4 braços curtos, raios |
+| `block/quantum_tunnel.json` | Túnel Quântico | 3×3×3 (um por dimensão) | o do **centro** (camada do meio) | anéis do mastro, pulsos, par entrelaçado, orbes de dimensão, feixe curto, ondas (sem braços) |
+| `block/collapser.json` | Colapsador | 3×3×3 | o do **centro** (camada do meio) | buraco negro, disco, braços, itens, partículas, raios |
+| `block/quantum_interface.json` | Interface Quântica (bloco) | 1×1 | — | cubo de dados 4×4×4 (voxels neutros que acendem na cor dos canais ativos), voxels a entrar e sair pelas faces, plano de leitura |
+| `block/interface_panel.json` | Interface (painel) | painel na face | — | cubo de dados 3×3×3, voxels entre o cubo e o bloco, plano de leitura |
 | `block/machine_anchor.json` | Âncora de Máquina | chip na face | — | ícone 3D (brilho) |
 | `block/inventory_anchor.json` | Âncora de Inventário | chip na face | — | — |
 | `block/level_emitter.json` | Emissor de Nível | chip na face | — | — |
-| `block/quantum_manipulator.json` | Manipulador Quântico | 1×1 | — | alvo, feixe, partículas, setas |
-| `block/stock_regulator.json` | Regulador de Estoque | 1×1 | — | coluna, anéis de pulso, item a flutuar |
+| `block/quantum_manipulator.json` | Manipulador Quântico | 1×1 | — | íris, lente, cristal, garras, alvo, feixe, partículas, setas |
+| `block/stock_regulator.json` | Regulador de Estoque | 3×3×3 (um por base) | o do **centro** (camada do meio) | tesserato, item, braços, raios (base de contenção partilhada) |
 | `block/monitor.json`, `block/network_panel.json` | Monitor, Painel da Rede | 1×1 (Painel: multibloco) | — | o ecrã inteiro da frente |
 | `item/entangler.json` | Entrelaçador (item) | — | — | orbe e par entrelaçado |
 | `item/portable_terminal.json` | Terminal Portátil (item) | — | — | holograma, orbe |
@@ -40,7 +40,9 @@ parte brilhar, basta usar uma textura cujo nome começa com `glow_`.
 | `block/superposition_matrix_upper.json` | Metade de cima da Matriz | — | — | vazio de propósito (o modelo inteiro sai da metade de baixo) |
 | `item/superposition_matrix.json` | Matriz (item) | — | — | modelo do bloco reduzido (`display`) |
 
-**Efeitos já feitos (V1):** Núcleo (esfera de voxels, 3 anéis, qubits, orbes das gaiolas e auréola;
+**Modelos de 2026-10-21 (estilo do Núcleo):** gerados pelo exportador de `tools/prototype/` (ver o README de lá), com a paleta padrão **Magenta + Roxo**. Os blocos 3×3×3 (Núcleo, Regulador, Bateria, Processador, Túnel) usam a **mesma base de contenção**. A Interface é uma moldura aberta e simétrica; o Painel é uma face dessa moldura. Os efeitos abaixo são do desenho **anterior** e precisam ser refeitos para os modelos novos.
+
+**Efeitos já feitos (V1, desenho anterior):** Núcleo (esfera de voxels, 3 anéis, qubits, orbes das gaiolas e auréola;
 `client/render/CoreEffectsRenderer`) e Matriz (partículas
 nas câmaras, LEDs, medidores e luz de estado; `client/render/MatrixEffectsRenderer`). Os da Matriz são desenhados **por
 cima** das peças do modelo, nas posições delas: se mover câmaras, LEDs ou segmentos no Blockbench, avise para
