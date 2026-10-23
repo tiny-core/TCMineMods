@@ -30,7 +30,7 @@
   "item.tcquantum.qubit_module_5": "TC Módulo de Qubits V",
   "tooltip.tcquantum.qubit_module.capacity": "+%s itens por Matriz de Superposição",
   "tooltip.tcquantum.qubit_module.usage": "Clique numa Matriz para encaixar · Shift+clique nela com a mão vazia para tirar",
-  "message.tcquantum.matrix.full": "Esta Matriz já tem 4 módulos",
+  "message.tcquantum.matrix.full": "Esta Matriz já tem %s módulos",
   "message.tcquantum.matrix.module_in": "Módulo encaixado (%s/%s) · capacidade da Matriz %s itens",
   "message.tcquantum.matrix.module_out": "Módulo retirado · capacidade da Matriz %s itens",
   "message.tcquantum.matrix.module_out_over": "Módulo retirado · capacidade da Matriz %s itens. A rede ficou acima da capacidade: nada se perde, mas nada novo entra",

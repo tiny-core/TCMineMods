@@ -30,7 +30,7 @@
   "item.tcquantum.qubit_module_5": "TC Qubit Module V",
   "tooltip.tcquantum.qubit_module.capacity": "+%s items per Superposition Matrix",
   "tooltip.tcquantum.qubit_module.usage": "Click a Matrix to install · Shift+click it with an empty hand to remove",
-  "message.tcquantum.matrix.full": "This Matrix already has 4 modules",
+  "message.tcquantum.matrix.full": "This Matrix already has %s modules",
   "message.tcquantum.matrix.module_in": "Module installed (%s/%s) · Matrix capacity %s items",
   "message.tcquantum.matrix.module_out": "Module removed · Matrix capacity %s items",
   "message.tcquantum.matrix.module_out_over": "Module removed · Matrix capacity %s items. The network is now over capacity: nothing is lost, but nothing new goes in",

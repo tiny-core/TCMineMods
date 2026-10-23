@@ -430,5 +430,25 @@
 				"down": {"uv": [10.4, 14.95, 11.2, 15], "texture": "#t9"}
 			}
 		}
-	]
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [-86.5, 0, 0],
+			"translation": [0, 2.5, -1.5],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [-86.5, 0, 0],
+			"translation": [0, 2.5, -1.5],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"firstperson_righthand": {
+			"rotation": [-28.95, -26.36, -13.8],
+			"translation": [2.5, 0, 0]
+		},
+		"firstperson_lefthand": {
+			"rotation": [-28.95, -26.36, -13.8],
+			"translation": [2.5, 0, 0]
+		}
+	}
 }

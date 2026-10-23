@@ -21,7 +21,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,7 +34,8 @@ import org.tinycore.quantum.registry.ModBlocks;
  * <p>Ocupa um cubo 3×3×3 ({@link CoreFootprint}). Este é o bloco do <b>centro</b>: tem o block entity e desenha o
  * modelo inteiro (o modelo vai de −16 a 32 px, o máximo que o Minecraft aceita). Os outros 26 são
  * {@link CoreStructureBlock}: invisíveis, com colisão, repassam cliques e energia para cá. A técnica é a do
- * Digital Miner do Mekanism: não dá para atravessar o Núcleo, e quebrar qualquer parte quebra o cubo todo.
+ * Digital Miner do Mekanism: quebrar qualquer parte quebra o cubo todo. Contorno e colisão seguem o modelo
+ * (base e cristal, {@link CoreShape}); onde não há modelo, a peça não colide.
  *
  * <p>O item é colocado com o bloco clicado como base do cubo ({@link QuantumCoreItem}); só coloca se as 27
  * posições estiverem livres. {@link #ONLINE} é atualizado pelo {@link QuantumCoreBlockEntity} (luz e, depois,
@@ -47,9 +47,6 @@ public class QuantumCoreBlock extends Block implements EntityBlock {
 
     /** Rede ligada (com energia) ou em espera. */
     public static final BooleanProperty ONLINE = BooleanProperty.create("online");
-
-    /** Contorno do cubo inteiro, visto do centro: a seleção mostra o Núcleo todo. */
-    static final VoxelShape CUBE = Block.box(-16, -16, -16, 32, 32, 32);
 
     public QuantumCoreBlock(Properties properties) {
         super(properties);
@@ -66,14 +63,14 @@ public class QuantumCoreBlock extends Block implements EntityBlock {
     @Override
     protected @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level,
                                            @NotNull BlockPos pos, @NotNull CollisionContext context) {
-        return CUBE;
+        return CoreShape.outline(CoreFootprint.CENTER, CoreFootprint.CENTER, CoreFootprint.CENTER);
     }
 
-    /** Colisão só no próprio bloco: cada bloco de estrutura tem a sua. */
+    /** Colisão só no próprio bloco (o pedaço de base e cristal que cai nele): cada bloco de estrutura tem a sua. */
     @Override
     protected @NotNull VoxelShape getCollisionShape(@NotNull BlockState state, @NotNull BlockGetter level,
                                                     @NotNull BlockPos pos, @NotNull CollisionContext context) {
-        return Shapes.block();
+        return CoreShape.collision(CoreFootprint.CENTER, CoreFootprint.CENTER, CoreFootprint.CENTER);
     }
 
     /** Sem sombra de "bloco cheio" (ambient occlusion) no modelo, que está cercado pelos blocos de estrutura. */

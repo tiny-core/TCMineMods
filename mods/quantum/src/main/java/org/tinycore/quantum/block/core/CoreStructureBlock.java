@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.tinycore.quantum.block.core.CoreFootprint.Offset;
@@ -37,16 +36,6 @@ public class CoreStructureBlock extends Block {
     public static final IntegerProperty OFFSET_X = IntegerProperty.create("ox", 0, CoreFootprint.MAX_INDEX);
     public static final IntegerProperty OFFSET_Y = IntegerProperty.create("oy", 0, CoreFootprint.MAX_INDEX);
     public static final IntegerProperty OFFSET_Z = IntegerProperty.create("oz", 0, CoreFootprint.MAX_INDEX);
-
-    /** Contorno do cubo inteiro visto de cada posição (índice = x·9 + y·3 + z), calculado uma vez. */
-    private static final VoxelShape[] SHAPES = new VoxelShape[27];
-
-    static {
-        for (Offset o : CoreFootprint.all()) {
-            SHAPES[shapeIndex(o.indexX(), o.indexY(), o.indexZ())] =
-                    QuantumCoreBlock.CUBE.move(-o.dx(), -o.dy(), -o.dz());
-        }
-    }
 
     public CoreStructureBlock(Properties properties) {
         super(properties);
@@ -75,22 +64,18 @@ public class CoreStructureBlock extends Block {
         return pos.offset(-o.dx(), -o.dy(), -o.dz());
     }
 
-    private static int shapeIndex(int x, int y, int z) {
-        return x * 9 + y * 3 + z;
-    }
-
     // ---------------------------------------------------------------- formato
 
     @Override
     protected @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level,
                                            @NotNull BlockPos pos, @NotNull CollisionContext context) {
-        return SHAPES[shapeIndex(state.getValue(OFFSET_X), state.getValue(OFFSET_Y), state.getValue(OFFSET_Z))];
+        return CoreShape.outline(state.getValue(OFFSET_X), state.getValue(OFFSET_Y), state.getValue(OFFSET_Z));
     }
 
     @Override
     protected @NotNull VoxelShape getCollisionShape(@NotNull BlockState state, @NotNull BlockGetter level,
                                                     @NotNull BlockPos pos, @NotNull CollisionContext context) {
-        return Shapes.block();
+        return CoreShape.collision(state.getValue(OFFSET_X), state.getValue(OFFSET_Y), state.getValue(OFFSET_Z));
     }
 
     @Override
