@@ -13,8 +13,8 @@ import java.util.Arrays;
  */
 public final class MatrixModules {
 
-    /** Encaixes por Matriz (as 4 câmaras do modelo). */
-    public static final int SLOTS = 4;
+    /** Encaixes por Matriz (os 5 berços do modelo). */
+    public static final int SLOTS = 5;
     /** Maior nível de módulo (Módulo de Qubits V). */
     public static final int MAX_TIER = 5;
 
@@ -85,6 +85,11 @@ public final class MatrixModules {
     }
 
     /** Cópia dos níveis por encaixe (para gravar no disco). */
+    /** Nível do módulo no encaixe {@code slot} (0 = vazio), sem copiar nada: para o desenho a cada quadro. */
+    public int tier(int slot) {
+        return tiers[slot];
+    }
+
     public int[] toArray() {
         return tiers.clone();
     }

@@ -206,7 +206,7 @@ public class SuperpositionMatrixBlock extends Block implements EntityBlock, Enta
             return ItemInteractionResult.FAIL;
         }
         if (!matrix.insertModule(module.tier())) {
-            player.displayClientMessage(Component.translatable("message.tcquantum.matrix.full"), true);
+            player.displayClientMessage(Component.translatable("message.tcquantum.matrix.full", MatrixModules.SLOTS), true);
             return ItemInteractionResult.CONSUME;
         }
         stack.consume(1, player);

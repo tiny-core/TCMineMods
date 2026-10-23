@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** {@link MatrixModules}: 4 encaixes, entra no primeiro vazio, sai o último, capacidade somada sem estourar. */
+/** {@link MatrixModules}: 5 encaixes, entra no primeiro vazio, sai o último, capacidade somada sem estourar. */
 class MatrixModulesTest {
 
     private static final long[] PER_TIER = {100, 1_000, 10_000, 100_000, 1_000_000};
@@ -64,7 +64,7 @@ class MatrixModulesTest {
     @Test
     void loadIgnoresInvalidData() {
         MatrixModules modules = new MatrixModules();
-        modules.load(new int[]{2, 9, -1, 4, 5, 5});
+        modules.load(new int[]{2, 9, -1, 4, 0, 5});
         assertEquals(2, modules.count(), "9 e -1 são inválidos; encaixes a mais são ignorados");
         assertEquals(4, modules.removeLast());
         assertEquals(2, modules.removeLast());
