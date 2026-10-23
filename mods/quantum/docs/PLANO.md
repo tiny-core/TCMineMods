@@ -238,7 +238,7 @@ A rede deteta sozinha as máquinas iguais e reparte o trabalho entre elas.
 | 3a | **TC Âncora de Máquina** | Link completo com a máquina (§3.4) |
 | 3b | **TC Âncora de Inventário** | Baú/tanque passa a fazer parte da rede |
 | 4 | **TC Matriz de Superposição — Itens / Fluidos / Químicos** | Capacidade por tipo, expansível com módulos |
-| — | **TC Módulo de Qubits I–V** (item) | Aumenta a capacidade da Matriz (4 encaixes) |
+| — | **TC Módulo de Qubits I–V** (item) | Aumenta a capacidade da Matriz (5 encaixes) |
 | — | **TC Bateria de Vácuo** | Armazenamento de energia da rede; expansível com módulos; alimenta Âncoras e o Núcleo |
 | — | **TC Entrelaçador** (item) | Liga blocos ao Núcleo e mostra as ligações |
 

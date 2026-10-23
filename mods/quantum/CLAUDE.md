@@ -7,12 +7,7 @@ Armazenamento e automação **sem cabos**: um Núcleo Quântico obrigatório e b
 completo, telas e modelos: `docs/PLANO.md`. **Ler o plano antes de mudar regras de
 `storage/` ou `grid/`.**
 
-Estado: **fase 1, fatia 1.4** — Núcleo Quântico (cubo 3×3×3), redes gravadas no mundo (`QuantumNetworks`), energia FE
-com espera, Entrelaçador, Matriz de Superposição (Itens) com **Módulos de Qubits I–V**, e o **conteúdo da rede**
-(pools de itens e fluidos) gravado no mundo, e os **efeitos** (V1) do Núcleo e da Matriz. Texturas remapeadas
-(UV por posição, materiais emendáveis). **Modelos v2** (2026-10-21) no estilo do Núcleo, exportados de
-`tools/prototype/`; os efeitos V1 do Núcleo e da Matriz ainda são do desenho anterior. Próxima: 1.5 Terminal (aba
-Rede) — o patch antigo da 1.5 perdeu-se e precisa ser refeito.
+Estado: **fase 1, fatia 1.4** — Núcleo Quântico (cubo 3×3×3, base 3×3, contorno/colisão em `block/core/CoreShape`), redes gravadas no mundo (`QuantumNetworks`), energia FE com espera, Entrelaçador, Matriz de Superposição (Itens) com **Módulos de Qubits I–V** (5 encaixes), e o **conteúdo da rede** (pools de itens e fluidos) gravado no mundo. **Efeitos V2** do Núcleo (`client/render/core/`, `CoreAnimation`/`CoreCrystal`/`CoreRings`/`CoreBeam`/`CoreArms`/`CoreBolts`) e da Matriz (`client/render/matrix/`, `MatrixSpine`/`MatrixCells`). Texturas remapeadas (UV por posição, materiais emendáveis). **Modelos v2** (2026-10-21) no estilo do Núcleo, exportados de `tools/prototype/`. Próxima: 1.5 Terminal (aba Rede).
 
 ## Decisões de design em vigor (detalhe em `docs/DECISOES.md`)
 
@@ -35,7 +30,7 @@ Rede) — o patch antigo da 1.5 perdeu-se e precisa ser refeito.
 ## Próximos passos (ordem sugerida)
 
 1. Refazer a fatia 1.5 (Terminal, aba Rede).
-2. BERs novos do Núcleo e da Matriz para os modelos v2 (braços, cristal, coluna, raios; células da Matriz).
+2. ~~BERs novos do Núcleo e da Matriz para os modelos v2~~ **feito** — luzes da base sem energia (blockstate apagado), auréola do Núcleo (precisa textura), conteúdo fluido/gás da Matriz.
 3. Ainda no protótipo: Interface, Painel da Interface, Âncoras, Entrelaçador, Monitor, Painel da Rede, Portátil.
 
 ## Regras que não podem ser quebradas
@@ -61,8 +56,8 @@ Rede) — o patch antigo da 1.5 perdeu-se e precisa ser refeito.
 - Carregar do disco usa `ResourcePool.restore` (ignora a capacidade); o jogo usa `insert`/`extract`.
 - Efeitos de bloco (`client/render/`): só desenham, nunca decidem. O estado vem do bloco (Núcleo: `ONLINE`) ou do
   block entity sincronizado pelo servidor só quando muda, no máximo 1×/s (Matriz: `visualOnline`, `visualFill`).
-  As posições dos efeitos da Matriz copiam o modelo do autor: mudou câmara/medidor/LED no Blockbench, atualizar as
-  constantes do `MatrixEffectsRenderer`.
+  As posições dos efeitos da Matriz copiam o modelo do autor: mudou câmara/medidor/LED/anel no Blockbench, atualizar as
+  constantes do `MatrixSpine` e `MatrixCells`.
 - Partículas e tudo que é visual ficam em `client/` (`@EventBusSubscriber(value = Dist.CLIENT)`); o servidor decide o
   que mostrar e manda por pacote (`network/`).
 
@@ -77,8 +72,8 @@ Rede) — o patch antigo da 1.5 perdeu-se e precisa ser refeito.
 | `item/` | `EntanglerItem`, `QubitModuleItem` |
 | `network/` | `ModNetwork`, `EntanglementLinesPayload`, `EntanglementBroadcaster` (manda as ligações 1×/s) |
 | `client/` | `ClientSetup` (registra os renderizadores), `ClientPayloadHandler`, `EntanglementLines` (partículas) |
-| `client/render/` | `EffectBoxes` (caixas coloridas com luz máxima), `CoreEffectsRenderer`, `MatrixEffectsRenderer` |
-| `block/core/` | `QuantumCoreBlock` (centro), `CoreStructureBlock` (os 26 em volta), `QuantumCoreBlockEntity`, `CoreEnergyStorage` (FE), `QuantumCoreItem` (coloca com o clicado como base), `CoreFootprint` (geometria) |
+| `client/render/` | `EffectBoxes`, `EffectPalette`, `AppearClock` (base compartilhada); `core/` (`CoreEffectsRenderer`, `CoreAnimation`, `CoreCrystal`, `CoreRings`, `CoreBeam`, `CoreArms`, `CoreBolts`); `matrix/` (`MatrixEffectsRenderer`, `MatrixSpine`, `MatrixCells`) |
+| `block/core/` | `QuantumCoreBlock` (centro), `CoreStructureBlock` (os 26 em volta), `QuantumCoreBlockEntity`, `CoreEnergyStorage` (FE), `QuantumCoreItem` (coloca com o clicado como base), `CoreFootprint` (geometria), `CoreShape` (contorno e colisão) |
 | `registry/` | Blocos, itens, block entities, componentes de item, aba do criativo, capabilities |
 
 ## Modelos e texturas

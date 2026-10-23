@@ -21,6 +21,7 @@ O coração da rede: sem ele, nada do mod funciona. Ocupa um cubo de **3×3×3**
   (aparece no tooltip): colocado de novo, em qualquer lugar ou dimensão, a energia e o conteúdo voltam. Um Núcleo
   copiado no criativo cria uma rede nova; duas cópias nunca dividem o mesmo conteúdo.
 - Resiste a explosões como obsidiana e não é movido por pistões.
+- **Contorno e colisão:** seguem o modelo (duas caixas: base 3×3 inteira e cristal central); braços animados não colidem.
 - **Efeitos:** ligado, a esfera roxa pulsa, os 3 anéis giram e 6 qubits orbitam; em espera, a esfera apaga e os anéis
   param.
 
@@ -42,14 +43,14 @@ Dois blocos de altura; soma capacidade de itens à rede em que estiver. Não gua
 rede, e a capacidade continua a contar com o chunk da Matriz descarregado.
 
 - **Clique com a mão vazia:** módulos encaixados, capacidade da Matriz e a ocupação da rede.
-- **Clique com um Módulo de Qubits:** encaixa (4 encaixes). **Shift + clique com a mão vazia:** tira o último.
+- **Clique com um Módulo de Qubits:** encaixa (5 encaixes). **Shift + clique com a mão vazia:** tira o último.
 - **Quebrar:** cai a Matriz e os módulos que estavam nela.
 - **Efeitos:** partículas nas câmaras com módulo (mais quanto mais cheia a rede); LED de cada câmara; medidores de
   ocupação (10 segmentos de cada lado, 12 na frente; cor laranja até 80%, âmbar até 95%, vermelho acima; cheia, o
   último pisca) e luz de estado no topo. Rede em espera: tudo apagado. Atualiza 1 vez por segundo.
 
 Capacidade de uma Matriz = `matrixItemCapacity` + a soma dos módulos. Padrões: I = 262k, II = 2M, III = 16M,
-IV = 134M, V = 1G itens por módulo (uma Matriz com 4 módulos V guarda ~4,3 mil milhões de itens).
+IV = 134M, V = 1G itens por módulo (uma Matriz com 5 módulos V guarda ~5,4 mil milhões de itens).
 
 Tirar módulos com a rede cheia deixa a rede **acima da capacidade**: nada se perde, só não entra nada novo até
 sobrar espaço. Guardar e tirar itens chega com o Terminal (fatia 1.5).

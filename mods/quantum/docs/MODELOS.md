@@ -40,14 +40,17 @@ parte brilhar, basta usar uma textura cujo nome começa com `glow_`.
 | `block/superposition_matrix_upper.json` | Metade de cima da Matriz | — | — | vazio de propósito (o modelo inteiro sai da metade de baixo) |
 | `item/superposition_matrix.json` | Matriz (item) | — | — | modelo do bloco reduzido (`display`) |
 
-**Modelos de 2026-10-21 (estilo do Núcleo):** gerados pelo exportador de `tools/prototype/` (ver o README de lá), com a paleta padrão **Magenta + Roxo**. Os blocos 3×3×3 (Núcleo, Regulador, Bateria, Processador, Túnel) usam a **mesma base de contenção**. A Interface é uma moldura aberta e simétrica; o Painel é uma face dessa moldura. Os efeitos abaixo são do desenho **anterior** e precisam ser refeitos para os modelos novos.
+**Modelos de 2026-10-21 (estilo do Núcleo):** gerados pelo exportador de `tools/prototype/` (ver o README de lá), com a paleta padrão **Magenta + Roxo**. Os blocos 3×3×3 (Núcleo, Regulador, Bateria, Processador, Túnel) usam a **mesma base de contenção**, que ocupa o chão 3×3 inteiro (~48 px em XZ, 15,6 px de altura). A Interface é uma moldura aberta e simétrica; o Painel é uma face dessa moldura.
 
-**Efeitos já feitos (V1, desenho anterior):** Núcleo (esfera de voxels, 3 anéis, qubits, orbes das gaiolas e auréola;
-`client/render/CoreEffectsRenderer`) e Matriz (partículas
-nas câmaras, LEDs, medidores e luz de estado; `client/render/MatrixEffectsRenderer`). Os da Matriz são desenhados **por
-cima** das peças do modelo, nas posições delas: se mover câmaras, LEDs ou segmentos no Blockbench, avise para
-atualizar as posições no código (vale também para as gaiolas do topo dos pilares do Núcleo). Ainda faltam os feixes
-do Núcleo.
+**Efeitos V2 (novos, 2026-10-23):**
+
+- **Núcleo** (`client/render/core/`): `CoreEffectsRenderer` (monta o quadro), `CoreAnimation` (surgimento em 2,6 s), `CoreCrystal` (cristal octaédrico de 184 voxels + miolo), `CoreRings` (2 anéis), `CoreBeam` (coluna + faíscas), `CoreArms` (4 braços; animados, apagados sem energia), `CoreBolts` (8 raios, sem estado). Sem auréola: precisa de textura. Raio dos braços: 20 px (animado, sai do 3×3).
+
+- **Matriz** (`client/render/matrix/`): `MatrixEffectsRenderer`, `MatrixSpine` (linha de dados, 2 medidores de 10 segmentos, luz de estado, pulsos, anel da coroa — pintados por cima das luzes do JSON), `MatrixCells` (5 células com vidro, arestas, fantasma e conteúdo de itens; fluido e gás quando houver módulos desses tipos). Surgimento em 2,4 s.
+
+- **Compartilhados** (`client/render/`): `AppearClock` (relógio do surgimento + tempo ligado que pausa), `EffectPalette` (Magenta + Roxo), `EffectBoxes` (público: modo luz, modo metal sombreado, barra fina "beam").
+
+As posições dos efeitos da Matriz copiam o modelo: mudou câmara/medidor/LED/anel no Blockbench, atualizar as constantes do `MatrixSpine` e `MatrixCells`.
 
 A **frente** dos modelos de bloco com orientação (Matriz) é o lado **sul** (z = 16) do modelo; o blockstate gira a
 partir daí. O `item/entangler.json` (e o `item/portable_terminal.json`) ainda não tem `display`: no Blockbench, aba
