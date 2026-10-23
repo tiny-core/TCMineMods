@@ -26,7 +26,10 @@
   function bx(g, x0, y0, z0, x1, y1, z1, mat) { return box(g, Math.min(x0, x1), Math.min(y0, y1), Math.min(z0, z1), Math.max(x0, x1), Math.max(y0, y1), Math.max(z0, z1), mat); }
   const smooth = (p, a, b) => { const k = Math.min(1, Math.max(0, (p - a) / (b - a))); return k * k * (3 - 2 * k); };
   // Base de contenção do Núcleo (JSON), partilhada com o Regulador: 2 andares baixos de metal, nichos, pistas de luz, anel e emissor. Devolve o material do emissor.
-  function coreBase(g, sm, wm) {
+  // A base foi desenhada com 29,4 px de largura; BASE_XZ alarga-a para ocupar o chão 3×3 (48 px, 0,1 px de folga) sem mudar a altura.
+  const BASE_XZ = 23.9 / 14.7;
+  function coreBase(parent, sm, wm) {
+    const g = new THREE.Group(); g.scale.set(BASE_XZ, 1, BASE_XZ); parent.add(g); // só escala em X e Z: os giros em Y lá dentro não deformam
     // ---------- base de contenção (JSON): 2 andares baixos de metal, com painéis, grelhas e pistas de luz ----------
       cbox(g, -14.5, 0, -14.5, 14.5, 1.5, 14.5, 'dark', 2);
       box(g, -10, 1.5, -10, 10, 7, 10, 'dark'); // miolo, visto pelos nichos
@@ -79,7 +82,7 @@
     states: ['Online', 'Ocupado', 'Erro', 'Sem energia'],
     levels2: CORE_PALETTES.map((_, i) => i), levelNames2: CORE_PALETTES.map(p => p.name), levelLabel2: 'Cor',
     info: {
-      parts: ['<b>Base de contenção</b> baixa, em 2 andares de metal (29 × 13 px): 4 blocos de canto embaixo com grelhas e filete na aresta chanfrada, 4 menores em cima com parafusos',
+      parts: ['<b>Base de contenção</b> baixa, em 2 andares de metal (ocupa o chão 3×3: 48 × 15,6 px): 4 blocos de canto embaixo com grelhas e filete na aresta chanfrada, 4 menores em cima com parafusos',
         '<b>Nichos</b> no meio de cada face: gema azul num lado, fendas de luz no outro; <b>janelas azuis</b> no andar de cima',
         '<b>Pistas de luz</b> no topo dos blocos e em volta do rodapé, e cabos de luz descendo dos nichos',
         '<b>Anel de metal</b> com filetes de luz no topo, <b>4 pinos emissores</b> e o <b>emissor redondo</b>, de onde sobe a coluna de energia',
@@ -94,7 +97,7 @@
       tech: ['<b>Colisão real nos 27 blocos</b> (1 principal + 26 de estrutura), como hoje',
         'Base em JSON (custo zero por frame); braços, cristal, anéis, coluna e raios no BlockEntityRenderer, só até 64 blocos',
         'O surgimento usa o mesmo relógio "online desde" que o Núcleo atual já tem no código (APPEAR_TICKS)',
-        'Tudo cabe na janela de −16 a 32 px do modelo (braços com raio de 17 px)']
+        'A base (JSON) cabe na janela de −16 a 32 px; os braços (BER, raio de 20 px) podem sair dela']
     },
     build() {
       const g = new THREE.Group(), CY = 28, r = rng(4242);
@@ -131,7 +134,7 @@
       // ---------- braços flutuantes ----------
       const armsRoot = new THREE.Group(); armsRoot.position.y = CY * P; g.add(armsRoot);
       const ARMS = [{ yaw: 0, a0: -35, a1: 68 }, { yaw: Math.PI / 2, a0: 40, a1: 72 }, { yaw: Math.PI, a0: -35, a1: 68 }, { yaw: Math.PI * 1.5, a0: 40, a1: 72 }];
-      const Ra = 17, arms = [], allJoints = [];
+      const Ra = 20, arms = [], allJoints = [];
       ARMS.forEach((A, k) => {
         const yawG = new THREE.Group(); yawG.rotation.y = A.yaw; armsRoot.add(yawG);
         const arm = new THREE.Group(); yawG.add(arm);
