@@ -5,8 +5,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import org.tinycore.quantum.TcQuantum;
-import org.tinycore.quantum.client.render.CoreEffectsRenderer;
-import org.tinycore.quantum.client.render.MatrixEffectsRenderer;
+import org.tinycore.quantum.client.render.core.CoreEffectsRenderer;
+import org.tinycore.quantum.client.render.matrix.MatrixEffectsRenderer;
 import org.tinycore.quantum.registry.ModBlockEntities;
 
 /**
